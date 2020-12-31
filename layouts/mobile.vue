@@ -1,5 +1,6 @@
 <template>
     <v-app dark>
+        <h1>MOBILE LAYOUT</h1>
         <nuxt />
         <Footer />
     </v-app>

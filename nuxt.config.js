@@ -9,7 +9,7 @@ export default {
     },
 
     serverMiddleware: {
-        "/api": "~/api/app.ts"
+        '/api': '~/api/app.ts'
     },
 
     // Global page headers (https://go.nuxtjs.dev/config-head)
@@ -41,7 +41,20 @@ export default {
         // https://go.nuxtjs.dev/typescript
         '@nuxt/typescript-build',
         // https://go.nuxtjs.dev/vuetify
-        '@nuxtjs/vuetify'
+        '@nuxtjs/vuetify',
+        [
+            '@nuxtjs/fontawesome',
+            {
+                component: 'fa',
+                suffix: true,
+                icons: {
+                    // FIXME Replace `true` with a list of used icons
+                    regular: true,
+                    solid: true,
+                    brands: true
+                }
+            }
+        ]
     ],
 
     // Modules (https://go.nuxtjs.dev/config-modules)
@@ -50,7 +63,8 @@ export default {
         '@nuxtjs/axios',
         // https://go.nuxtjs.dev/pwa
         '@nuxtjs/pwa',
-        '@nuxtjs/auth-next'
+        '@nuxtjs/auth-next',
+        '@nuxtjs/device'
     ],
 
     // Axios module configuration (https://go.nuxtjs.dev/config-axios)
