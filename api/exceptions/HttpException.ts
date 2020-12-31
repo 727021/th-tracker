@@ -1,10 +1,15 @@
-export default class HttpException extends Error {
+class HttpException extends Error {
     status: number
     message: string
 
-    constructor(status?: number, message?: string) {
-        super(message || 'Server Error')
+    constructor(message?: string | Error | null, status?: number | null) {
+        if (message instanceof Error) message = message.message
+        if (!message) message = 'Server Error'
+
+        super(message)
         this.status = status || 500
-        this.message = message || 'Server Error'
+        this.message = message
     }
 }
+
+export default HttpException

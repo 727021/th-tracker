@@ -20,7 +20,7 @@ export const app = express()
 app.use(morgan('dev'))
     .use(helmet())
     .use(urlencoded({ extended: false }))
-    .use(json)
+    .use(json())
     .use(bearer())
     .use((req: Request, res: Response, next: NextFunction) => {
         if (req.token) {

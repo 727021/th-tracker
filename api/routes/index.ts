@@ -1,5 +1,5 @@
 import { Router, Request, Response, NextFunction } from 'express'
-import HttpException from '@/api/exceptions/HttpException'
+import HttpException from '../exceptions/HttpException'
 
 const router: Router = Router()
 
@@ -17,8 +17,10 @@ router
             res: Response,
             next: NextFunction
         ) => {
+            if (!(err instanceof HttpException)) err = new HttpException(err)
             res.status(err.status).send({
-                message: err.message
+                message: err.message,
+                status: err.status
             })
         }
     )

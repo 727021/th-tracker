@@ -70,6 +70,8 @@
                     >
                         Nuxt GitHub
                     </a>
+                    Toggle dark mode:
+                    <v-switch v-model="$vuetify.theme.dark" />
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer />
