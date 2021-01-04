@@ -1,5 +1,5 @@
 <template>
-    <div></div>
+    <div>Homepage</div>
 </template>
 
 <script lang="ts">
@@ -8,6 +8,7 @@ import Vue from 'vue'
 export default Vue.extend({
     name: 'Index',
     head: { title: 'Home' },
-    auth: false
+    auth: false,
+    layout: ctx => (ctx.isMobile ? 'mobile' : 'default')
 })
 </script>
