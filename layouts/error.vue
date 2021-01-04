@@ -1,12 +1,12 @@
 <template>
-    <v-app dark>
-        <h1 class="text-center">Error Page</h1>
-        <Footer />
-    </v-app>
+    <h1 class="text-center">Error</h1>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
 
-export default Vue.extend({})
+export default Vue.extend({
+    props: ['error'],
+    layout: ctx => (ctx.isMobile ? 'mobile' : 'default')
+})
 </script>

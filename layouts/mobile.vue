@@ -1,7 +1,9 @@
 <template>
     <v-app dark>
-        <h1>MOBILE LAYOUT</h1>
-        <nuxt />
+        <v-system-bar></v-system-bar>
+        <v-main>
+            <nuxt />
+        </v-main>
         <Footer />
     </v-app>
 </template>
