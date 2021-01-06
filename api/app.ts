@@ -6,6 +6,7 @@ import helmet from 'helmet'
 import bearer from 'express-bearer-token'
 import { verify } from 'jsonwebtoken'
 import { config } from 'dotenv'
+import cors, { CorsOptions } from 'cors'
 
 import routes from './routes'
 
@@ -19,6 +20,7 @@ export const app = express()
 
 app.use(morgan('dev'))
     .use(helmet())
+    .use(cors())
     .use(urlencoded({ extended: false }))
     .use(json())
     .use(bearer())

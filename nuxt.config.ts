@@ -89,6 +89,10 @@ const config: NuxtConfig = {
                     user: { url: '/api/auth/user', method: 'get' }
                 }
             }
+        },
+        redirect: {
+            login: '/auth',
+            home: '/'
         }
     },
 

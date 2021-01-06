@@ -1,6 +1,7 @@
 <template>
     <div>
-        Homepage
+        <h1>Homepage</h1>
+        <p>Welcome, {{ $auth.user.username }}.</p>
         <v-btn @click="goForward">{{ $store.state.i }}</v-btn>
     </div>
 </template>
@@ -14,7 +15,6 @@ import { GO_FORWARD } from '@/store/mutation-types'
 export default Vue.extend({
     name: 'Index',
     head: { title: 'Home' },
-    auth: false,
     layout: ctx => (ctx.isMobile ? 'mobile' : 'default'),
     methods: {
         ...mapMutations({
