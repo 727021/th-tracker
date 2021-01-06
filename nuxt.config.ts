@@ -9,9 +9,6 @@ const config: NuxtConfig = {
         host: '0.0.0.0'
     },
 
-    // serverMiddleware: {
-    //     '/api': '~/api/app.ts'
-    // },
     serverMiddleware: [
         {
             path: '/api',
@@ -88,7 +85,7 @@ const config: NuxtConfig = {
                 },
                 endpoints: {
                     login: { url: '/api/auth/login', method: 'post' },
-                    logout: { url: '/api/auth/logout', method: 'post' },
+                    logout: false,
                     user: { url: '/api/auth/user', method: 'get' }
                 }
             }
@@ -119,7 +116,17 @@ const config: NuxtConfig = {
     },
 
     // Build Configuration (https://go.nuxtjs.dev/config-build)
-    build: {}
+    build: {},
+
+    pwa: {
+        meta: {
+            mobileAppIOS: true
+        },
+        manifest: {
+            name: 'Todo Tracker',
+            short_name: 'Tracker'
+        }
+    }
 }
 
 export default config

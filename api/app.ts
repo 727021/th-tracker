@@ -28,12 +28,16 @@ app.use(morgan('dev'))
                 req.token,
                 process.env.JWT_SECRET as string,
                 (err, decoded) => {
+                    req.authenticated = false
                     if (err && err.name === 'TokenExpiredError') next()
                     else if (err) next(err)
                     else
                         User.findById((decoded as IUser)._id)
                             .then(user => {
-                                if (user) req.user = user
+                                if (user) {
+                                    req.user = user
+                                    req.authenticated = true
+                                }
                                 next()
                             })
                             .catch(err => {

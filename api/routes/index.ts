@@ -1,14 +1,20 @@
 import { Router, Request, Response, NextFunction } from 'express'
+import { StatusCodes } from 'http-status-codes'
 import HttpException from '../exceptions/HttpException'
+
+import auth from './auth'
 
 const router: Router = Router()
 
 router
+    .use('/auth', auth)
     .get('/', (req: Request, res: Response, next: NextFunction) => {
-        res.status(200).send({ message: 'Hello, world!' })
+        res.status(StatusCodes.OK).send({ message: 'Hello, world!' })
     })
     .use((req: Request, res: Response, next: NextFunction) => {
-        res.status(404).send({ message: 'Resource Not Found' })
+        res.status(StatusCodes.NOT_FOUND).send({
+            message: 'Resource Not Found'
+        })
     })
     .use(
         (
