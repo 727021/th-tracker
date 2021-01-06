@@ -1,16 +1,23 @@
+import { NuxtConfig } from '@nuxt/types'
 import colors from 'vuetify/es5/util/colors'
 import dotenv from 'dotenv'
 dotenv.config()
 
-export default {
+const config: NuxtConfig = {
     server: {
         port: process.env.PORT || 3000,
         host: '0.0.0.0'
     },
 
-    serverMiddleware: {
-        '/api': '~/api/app.ts'
-    },
+    // serverMiddleware: {
+    //     '/api': '~/api/app.ts'
+    // },
+    serverMiddleware: [
+        {
+            path: '/api',
+            handler: '~/api/app.ts'
+        }
+    ],
 
     // Global page headers (https://go.nuxtjs.dev/config-head)
     head: {
@@ -114,3 +121,5 @@ export default {
     // Build Configuration (https://go.nuxtjs.dev/config-build)
     build: {}
 }
+
+export default config
