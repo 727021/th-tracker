@@ -1,5 +1,8 @@
 <template>
-    <h1 class="text-center">Error</h1>
+    <v-container>
+        <h1 class="text-center">Error</h1>
+        <p>{{ error.message }}</p>
+    </v-container>
 </template>
 
 <script lang="ts">
