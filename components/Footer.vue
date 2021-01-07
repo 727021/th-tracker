@@ -1,12 +1,12 @@
 <template>
     <v-footer padless fixed class="d-flex justify-space-between py-2 px-5">
-        <span
-            ><fa-icon :icon="['far', 'copyright']" />
+        <span class="text--secondary"
+            ><fa-icon size="sm" :icon="['far', 'copyright']" />
             {{ new Date().getFullYear() }}</span
         >
         <span>
             <DarkToggle left />
-            <v-btn icon href="https://727021.github.io" target="_blank">
+            <v-btn icon plain href="https://github.com/727021/Todo-Tracker" target="_blank">
                 <fa-icon size="lg" :icon="['fab', 'github']" />
             </v-btn>
         </span>

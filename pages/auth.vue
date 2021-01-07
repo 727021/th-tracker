@@ -4,21 +4,10 @@
             <v-col>
                 <v-card>
                     <v-card-title>{{
-                        register ? 'Create Account' : 'Log In'
+                        register ? 'Sign Up' : 'Log In'
                     }}</v-card-title>
                     <v-divider></v-divider>
                     <v-form class="px-5" v-if="!$device.isMobile">
-                        <v-row v-if="error">
-                            <v-col align="center">
-                                <v-alert
-                                    type="error"
-                                    dense
-                                    text
-                                    class="d-inline-block mt-2"
-                                    >{{ error }}</v-alert
-                                >
-                            </v-col>
-                        </v-row>
                         <v-row>
                             <v-col>
                                 <v-text-field
@@ -106,14 +95,22 @@
                     <v-divider></v-divider>
                     <v-card-actions>
                         <v-row>
-                            <v-col align="right"
-                                ><v-btn @click="onLogin">Log In</v-btn></v-col
-                            >
-                            <v-col align="left"
-                                ><v-btn @click="onCreateAccount"
-                                    >Create Account</v-btn
-                                ></v-col
-                            >
+                            <v-col class="text-right" align-self="center">
+                                <v-btn @click="onSubmit" color="success" text>
+                                    {{ register ? 'Sign Up' : 'Log In' }}
+                                </v-btn>
+                            </v-col>
+                            <v-col align-self="center">
+                                <v-btn
+                                    text
+                                    small
+                                    color="primary"
+                                    @click="toggleRegister"
+                                    >{{
+                                        register ? 'Log In' : 'Sign Up'
+                                    }}</v-btn
+                                >
+                            </v-col>
                         </v-row>
                     </v-card-actions>
                 </v-card>
@@ -145,14 +142,12 @@ interface form {
         error: string
         show: boolean
     }
-    error: string
     register: boolean
 }
 
 export default Vue.extend({
     name: 'Index',
     head: { title: 'Login or Register' },
-    auth: false,
     layout: ctx => (ctx.isMobile ? 'mobile' : 'default'),
     data: () => {
         const form: form = {
@@ -174,81 +169,73 @@ export default Vue.extend({
                 error: '',
                 show: false
             },
-            error: '',
             register: false
         }
 
         return { ...form }
     },
     methods: {
-        async onLogin() {
-            this.error = ''
+        toggleRegister() {
+            this.email.value = ''
+            this.confirm.value = ''
             this.username.error = ''
             this.email.error = ''
             this.password.error = ''
             this.confirm.error = ''
-            if (this.register) {
-                this.register = false
-                this.email.value = ''
-                this.confirm.value = ''
-                return
-            }
-
-            try {
-                await this.$auth.login({
-                    username: this.username.value,
-                    password: this.password.value
-                })
-            } catch (err) {
-                if (err.response.status == StatusCodes.CONFLICT)
-                    this.error = err.response.data.error
-                else throw err
-            }
+            this.register = !this.register
         },
-        async onCreateAccount() {
-            this.error = ''
-            this.username.error = ''
-            this.email.error = ''
-            this.password.error = ''
-            this.confirm.error = ''
-            if (!this.register) {
-                this.register = true
-                return
-            }
+        async onSubmit() {
+            if (this.register) {
+                try {
+                    const { username } = await this.$axios.$post(
+                        '/api/auth/register',
+                        {
+                            username: this.username.value,
+                            password: this.password.value,
+                            email: this.email.value,
+                            confirm: this.confirm.value
+                        }
+                    )
 
-            try {
-                const { username } = await this.$axios.$post(
-                    '/api/auth/register',
-                    {
-                        username: this.username.value,
-                        password: this.password.value,
-                        email: this.email.value,
-                        confirm: this.confirm.value
+                    this.password.value = ''
+                    this.username.value = username
+                    this.register = false
+                } catch (err) {
+                    if (
+                        err.response.status !== StatusCodes.UNPROCESSABLE_ENTITY
+                    )
+                        throw err
+
+                    for (const { param, msg } of err.response.data.errors) {
+                        switch (param) {
+                            case 'username':
+                                this.username.error = msg
+                                break
+                            case 'email':
+                                this.email.error = msg
+                                break
+                            case 'password':
+                                this.password.error = msg
+                                break
+                            case 'confirm':
+                                this.confirm.error = msg
+                                break
+                        }
                     }
-                )
-
-                this.password.value = ''
-                this.username.value = username
-                this.register = false
-            } catch (err) {
-                if (err.response.status !== StatusCodes.UNPROCESSABLE_ENTITY)
-                    throw err
-
-                for (const { param, msg } of err.response.data.errors) {
-                    switch (param) {
-                        case 'username':
-                            this.username.error = msg
-                            break
-                        case 'email':
-                            this.email.error = msg
-                            break
-                        case 'password':
-                            this.password.error = msg
-                            break
-                        case 'confirm':
-                            this.confirm.error = msg
-                            break
-                    }
+                }
+            } else {
+                try {
+                    await this.$auth.loginWith('local', {
+                        data: {
+                            username: this.username.value,
+                            password: this.password.value
+                        }
+                    })
+                } catch (err) {
+                    if (err.response.status == StatusCodes.CONFLICT) {
+                        this.username.error = err.response.data.error
+                        this.password.error = ' '
+                    } else throw err
                 }
             }
         }

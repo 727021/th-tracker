@@ -38,22 +38,13 @@ export const postLogin = async (
 ) => {
     const { username, password } = req.body
 
-    console.log({username})
-
     try {
         const user = await User.findOne({ username })
 
-        if (!user)
+        if (!user || !(await compare(password, user.password)))
             return res
                 .status(StatusCodes.CONFLICT)
-                .send({ error: 'Invalid Username' })
-
-        const match = await compare(password, user.password)
-
-        if (!match)
-            return res
-                .status(StatusCodes.CONFLICT)
-                .send({ error: 'Invalid Password' })
+                .send({ error: 'Invalid Username/Password' })
 
         const token = sign(
             { _id: user._id },
@@ -92,9 +83,11 @@ export const getUser = async (
                 .send({ error: 'User Not Found' })
 
         res.status(StatusCodes.OK).send({
-            _id: user._id,
-            username: user.username,
-            email: user.email
+            user: {
+                _id: user._id,
+                username: user.username,
+                email: user.email
+            }
         })
     } catch (err) {
         next(err)

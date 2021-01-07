@@ -31,6 +31,11 @@ const config: NuxtConfig = {
         link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
     },
 
+    loading: {
+        color: 'blue',
+        failedColor: 'blue'
+    },
+
     // Global CSS (https://go.nuxtjs.dev/config-css)
     css: [],
 
@@ -75,6 +80,7 @@ const config: NuxtConfig = {
     axios: {},
 
     auth: {
+        watchLoggedIn: true,
         strategies: {
             local: {
                 token: {
@@ -84,15 +90,24 @@ const config: NuxtConfig = {
                     property: 'user'
                 },
                 endpoints: {
-                    login: { url: '/api/auth/login', method: 'post' },
+                    login: {
+                        url: '/api/auth/login',
+                        method: 'post',
+                        propertyName: false
+                    },
                     logout: false,
-                    user: { url: '/api/auth/user', method: 'get' }
+                    user: {
+                        url: '/api/auth/user',
+                        method: 'get',
+                        propertyName: false
+                    }
                 }
             }
         },
         redirect: {
             login: '/auth',
-            home: '/'
+            home: '/',
+            logout: '/auth'
         }
     },
 
