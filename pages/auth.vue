@@ -7,7 +7,7 @@
                         register ? 'Sign Up' : 'Log In'
                     }}</v-card-title>
                     <v-divider></v-divider>
-                    <v-form class="px-5" v-if="!$device.isMobile">
+                    <v-form class="px-5" @submit.prevent="onSubmit">
                         <v-row>
                             <v-col>
                                 <v-text-field
@@ -88,82 +88,7 @@
                                 ></v-text-field>
                             </v-col>
                         </v-row>
-                    </v-form>
-                    <v-form class="px-5" v-else>
-                        <v-row>
-                            <v-col>
-                                <v-text-field
-                                    v-model="username.value"
-                                    label="Username"
-                                    :counter="register ? 20 : undefined"
-                                    :hint="
-                                        register
-                                            ? 'Must start with a letter or number and contain only letters, numbers, and underscores'
-                                            : undefined
-                                    "
-                                    autocomplete="username"
-                                    :error-messages="
-                                        username.error === ''
-                                            ? []
-                                            : [username.error]
-                                    "
-                                ></v-text-field>
-                                <v-text-field
-                                    v-if="register"
-                                    v-model="email.value"
-                                    label="E-Mail Address"
-                                    type="email"
-                                    autocomplete="email"
-                                    :error-messages="
-                                        email.error === '' ? [] : [email.error]
-                                    "
-                                ></v-text-field>
-                                <v-text-field
-                                    v-model="password.value"
-                                    label="Password"
-                                    :hint="
-                                        register
-                                            ? 'Must be at least 8 characters long'
-                                            : undefined
-                                    "
-                                    :type="password.show ? 'text' : 'password'"
-                                    :append-icon="
-                                        password.show
-                                            ? 'mdi-eye'
-                                            : 'mdi-eye-off'
-                                    "
-                                    @click:append="
-                                        password.show = !password.show
-                                    "
-                                    :autocomplete="
-                                        register
-                                            ? 'new-password'
-                                            : 'current-password'
-                                    "
-                                    :error-messages="
-                                        password.error === ''
-                                            ? []
-                                            : [password.error]
-                                    "
-                                ></v-text-field>
-                                <v-text-field
-                                    v-if="register"
-                                    v-model="confirm.value"
-                                    label="Confirm Password"
-                                    :type="confirm.show ? 'text' : 'password'"
-                                    :append-icon="
-                                        confirm.show ? 'mdi-eye' : 'mdi-eye-off'
-                                    "
-                                    @click:append="confirm.show = !confirm.show"
-                                    autocomplete="new-password"
-                                    :error-messages="
-                                        confirm.error === ''
-                                            ? []
-                                            : [confirm.error]
-                                    "
-                                ></v-text-field>
-                            </v-col>
-                        </v-row>
+                        <v-btn type="submit" class="d-none"></v-btn>
                     </v-form>
                     <v-divider></v-divider>
                     <v-card-actions>
