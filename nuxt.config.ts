@@ -1,13 +1,13 @@
 import { NuxtConfig } from '@nuxt/types'
 import colors from 'vuetify/es5/util/colors'
-import dotenv from 'dotenv'
-dotenv.config()
 
 const config: NuxtConfig = {
     server: {
         port: process.env.PORT || 3000,
         host: '0.0.0.0'
     },
+
+    dev: process.env.NODE_ENV === 'development',
 
     serverMiddleware: [
         {
@@ -18,15 +18,19 @@ const config: NuxtConfig = {
 
     // Global page headers (https://go.nuxtjs.dev/config-head)
     head: {
-        titleTemplate: '%s - Todo Tracker',
-        title: 'Todo Tracker',
+        titleTemplate: '%s - Tracker',
+        title: 'Tracker',
         meta: [
             { charset: 'utf-8' },
             {
                 name: 'viewport',
                 content: 'width=device-width, initial-scale=1'
             },
-            { hid: 'description', name: 'description', content: '' }
+            {
+                hid: 'description',
+                name: 'description',
+                content: 'Track habits and set goals'
+            }
         ],
         link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
     },
@@ -57,10 +61,9 @@ const config: NuxtConfig = {
                 component: 'fa',
                 suffix: true,
                 icons: {
-                    // FIXME Replace `true` with a list of used icons
-                    regular: true,
-                    solid: true,
-                    brands: true
+                    regular: ['faMoon', 'faSun', 'faCopyright'],
+                    solid: ['faSignOutAlt', 'faSignInAlt', 'faChevronLeft'],
+                    brands: ['faGithub']
                 }
             }
         ]

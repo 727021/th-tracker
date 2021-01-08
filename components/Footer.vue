@@ -5,8 +5,13 @@
             {{ new Date().getFullYear() }}</span
         >
         <span>
-            <DarkToggle left />
-            <v-btn icon plain href="https://github.com/727021/Todo-Tracker" target="_blank">
+            <DarkToggle />
+            <v-btn
+                icon
+                plain
+                href="https://github.com/727021/Todo-Tracker"
+                target="_blank"
+            >
                 <fa-icon size="lg" :icon="['fab', 'github']" />
             </v-btn>
         </span>
