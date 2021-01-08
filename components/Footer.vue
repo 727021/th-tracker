@@ -1,11 +1,20 @@
 <template>
-    <v-footer padless fixed class="d-flex justify-space-between py-2 px-5">
+    <v-footer
+        padless
+        fixed
+        class="d-flex justify-space-between align-center py-2 px-5"
+    >
         <span class="text--secondary"
             ><fa-icon size="sm" :icon="['far', 'copyright']" />
             {{ new Date().getFullYear() }}</span
         >
         <span>
-            <DarkToggle />
+            <DarkToggle
+                v-model="$vuetify.theme.dark"
+                button-tag="v-btn"
+                plain
+                font-awesome="fa-icon"
+            />
             <v-btn
                 icon
                 plain

@@ -1,13 +1,13 @@
 <template>
     <v-app-bar app>
-        <v-row>
-            <v-col align-self="center">
+        <v-row align="center">
+            <v-col cols="4" no-gutters>
                 <BackButton />
             </v-col>
-            <v-col align-self="center" class="text-center">
+            <v-col cols="4" no-gutters align="center">
                 <v-toolbar-title>Tracker</v-toolbar-title>
             </v-col>
-            <v-col align-self="center" class="text-right">
+            <v-col cols="4" no-gutters align="right">
                 <AuthButtons v-if="$nuxt.$route.path !== '/auth'" />
             </v-col>
         </v-row>

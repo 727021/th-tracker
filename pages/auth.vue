@@ -100,7 +100,6 @@ interface form {
 export default Vue.extend({
     name: 'Index',
     head: { title: 'Log In or Sign Up' },
-    layout: ctx => (ctx.isMobile ? 'mobile' : 'default'),
     auth: 'guest',
     data: () => {
         const form: form = {
@@ -157,7 +156,10 @@ export default Vue.extend({
                     if (
                         err.response.status !== StatusCodes.UNPROCESSABLE_ENTITY
                     )
-                        throw err
+                        return this.$nuxt.error({
+                            message: err.message ?? err.response?.data?.error,
+                            statusCode: err.response?.status
+                        })
 
                     for (const { param, msg } of err.response.data.errors) {
                         switch (param) {
@@ -185,10 +187,14 @@ export default Vue.extend({
                         }
                     })
                 } catch (err) {
-                    if (err.response.status == StatusCodes.CONFLICT) {
+                    if (err.response.status === StatusCodes.CONFLICT) {
                         this.username.error = err.response.data.error
                         this.password.error = ' '
-                    } else throw err
+                    } else
+                        this.$nuxt.error({
+                            message: err.message ?? err.response?.data?.error,
+                            statusCode: err.response?.status
+                        })
                 }
             }
         }

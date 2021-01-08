@@ -1,16 +1,40 @@
 <template>
-    <v-btn @click="$vuetify.theme.dark = !$vuetify.theme.dark" plain>
-        <span v-if="$vuetify.theme.dark">
-            Dark <fa-icon :icon="['far', 'moon']" />
+    <component :is="buttonTag" @click="$emit('input', !value)" v-bind="$attrs">
+        <span v-if="value">
+            <slot name="dark">
+                Dark
+                <component
+                    v-if="fontAwesome"
+                    :is="fontAwesome"
+                    :icon="['far', 'moon']"
+                />
+            </slot>
         </span>
-        <span v-else> Light <fa-icon :icon="['far', 'sun']" /> </span>
-    </v-btn>
+        <span v-else>
+            <slot name="light">
+                Light
+                <component
+                    v-if="fontAwesome"
+                    :is="fontAwesome"
+                    :icon="['far', 'sun']"
+                />
+            </slot>
+        </span>
+    </component>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
 
 export default Vue.extend({
-    name: 'DarkToggle'
+    name: 'DarkToggle',
+    props: {
+        value: Boolean,
+        buttonTag: {
+            type: String,
+            default: 'button'
+        },
+        fontAwesome: String
+    }
 })
 </script>
