@@ -8,8 +8,8 @@
 import Vue from 'vue'
 import { mapGetters, mapMutations } from 'vuex'
 
-import { CAN_GO_BACK } from '@/store/getter-types'
-import { GO_BACK } from '@/store/mutation-types'
+import { CAN_GO_BACK } from '@/@types/getter-types'
+import { GO_BACK } from '@/@types/mutation-types'
 
 export default Vue.extend({
     name: 'BackButton',

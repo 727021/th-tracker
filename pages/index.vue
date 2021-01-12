@@ -1,25 +1,26 @@
 <template>
-    <div>
-        <h1>Homepage</h1>
-        <p>Welcome, {{ $auth.user.username }}.</p>
-        <v-btn @click="goForward">{{ $store.state.i }}</v-btn>
-        <Calendar />
-    </div>
+    <v-container class="my-1">
+        <v-row>
+            <v-col>
+                <Calendar />
+            </v-col>
+            <v-divider style="min-height: 85vh" vertical></v-divider>
+            <v-col>
+                Tasks
+            </v-col>
+            <v-divider style="min-height: 85vh" vertical></v-divider>
+            <v-col>
+                Habits
+            </v-col>
+        </v-row>
+    </v-container>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapMutations } from 'vuex'
-
-import { GO_FORWARD } from '@/store/mutation-types'
 
 export default Vue.extend({
     name: 'Index',
-    head: { title: 'Home' },
-    methods: {
-        ...mapMutations({
-            goForward: GO_FORWARD
-        })
-    }
+    head: { title: 'Home' }
 })
 </script>
