@@ -61,8 +61,15 @@ const config: NuxtConfig = {
                 component: 'fa',
                 suffix: true,
                 icons: {
-                    regular: ['faMoon', 'faSun', 'faCopyright'],
-                    solid: ['faSignOutAlt', 'faSignInAlt', 'faChevronLeft'],
+                    regular: ['faMoon', 'faSun', 'faCopyright', 'faCalendarAlt'],
+                    solid: [
+                        'faSignOutAlt',
+                        'faSignInAlt',
+                        'faChevronLeft',
+                        'faPlus',
+                        'faTimes',
+                        'faTasks'
+                    ],
                     brands: ['faGithub']
                 }
             }

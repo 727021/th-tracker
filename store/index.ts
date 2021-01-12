@@ -1,11 +1,11 @@
 import { GetterTree, ActionTree, MutationTree } from 'vuex'
 
 import { CAN_GO_BACK } from '../@types/getter-types'
-import { GO_BACK, SET_DAY } from '../@types/mutation-types'
+import { GO_BACK, NEW_HABIT, NEW_TASK, SET_DAY } from '../@types/mutation-types'
 
 export const state = (): RootState => ({
     selectedDay: new Date().toISOString().substring(0, 10),
-    editTodo: undefined,
+    editTask: undefined,
     editHabit: undefined,
     history: [],
     i: 0
@@ -13,14 +13,14 @@ export const state = (): RootState => ({
 
 type Snapshot = {
     selectedDay: string
-    editTodo?: string
+    editTask?: string
     editHabit?: string
     i: number
 }
 
 export type RootState = {
     selectedDay: string
-    editTodo?: string
+    editTask?: string
     editHabit?: string
     i: number
     history: Snapshot[]
@@ -36,7 +36,7 @@ export const mutations: MutationTree<RootState> = {
             const prev = s.history.pop() as Snapshot
 
             s.selectedDay = prev?.selectedDay
-            s.editTodo = prev?.editTodo
+            s.editTask = prev?.editTask
             s.editHabit = prev?.editHabit
             s.i = prev?.i || 0
         }
@@ -44,13 +44,23 @@ export const mutations: MutationTree<RootState> = {
     [SET_DAY]: (s, day: string) => {
         takeSnapshot(s)
         s.selectedDay = day
+    },
+    [NEW_TASK]: s => {
+        if (s.selectedDay === '') return
+        takeSnapshot(s)
+        s.editTask = 'new'
+    },
+    [NEW_HABIT]: s => {
+        if (s.selectedDay === '') return
+        takeSnapshot(s)
+        s.editHabit = 'new'
     }
 }
 
 const takeSnapshot = (s: RootState) => {
     s.history.push({
         selectedDay: s.selectedDay,
-        editTodo: s.editTodo,
+        editTask: s.editTask,
         editHabit: s.editHabit,
         i: s.i
     })
