@@ -4,43 +4,36 @@
             color="warning"
             :width="$device.isMobile ? '' : '50%'"
             class="mx-auto pa-1"
-            dark
         >
-            <v-card-title> {{ isNew ? 'New' : 'Edit' }} Task </v-card-title>
-
-            <form @submit.prevent>
-                <!-- TODO Make this date-picker dialog combo its own reusable component -->
-                <v-dialog
-                    ref="dialog"
-                    v-model="modal"
-                    :return-value.sync="date"
-                    :width="$device.isMobile ? '' : '30%'"
-                >
-                    <template #activator="{ on, attrs }">
-                        <v-text-field
-                            v-model="date"
-                            label="Task Date"
-                            prepend-icon="mdi-calendar"
-                            readonly
-                            v-bind="attrs"
-                            v-on="on"
-                        ></v-text-field>
-                    </template>
-                    <v-date-picker v-model="date" scrollable>
-                        <v-spacer></v-spacer>
-                        <v-btn text color="primary" @click="modal = false">
-                            Cancel
-                        </v-btn>
-                        <v-btn
-                            text
-                            color="primary"
-                            @click="$refs.dialog.save(date)"
-                        >
-                            OK
-                        </v-btn>
-                    </v-date-picker>
-                </v-dialog>
-            </form>
+            <v-card-title class="white--text">
+                {{ isNew ? 'New' : 'Edit' }} Task
+            </v-card-title>
+            <v-card class="pa-1">
+                <form @submit.prevent>
+                    <DatePickerModal
+                        label="Task Date"
+                        v-model="date"
+                        clearable
+                    />
+                    <v-text-field
+                        v-model="title"
+                        prepend-icon="mdi-format-title"
+                        label="Task Title"
+                        counter="64"
+                        maxlength="64"
+                        clearable
+                    ></v-text-field>
+                    <v-textarea
+                        v-model="description"
+                        label="Task Description"
+                        prepend-icon="mdi-comment"
+                        auto-grow
+                        counter="128"
+                        maxlength="128"
+                        clearable
+                    ></v-textarea>
+                </form>
+            </v-card>
         </v-card>
     </v-container>
 </template>
@@ -51,11 +44,13 @@ export default Vue.extend({
     name: 'EditTask',
     data() {
         let date: string = this.$store.state.selectedDay
-        let modal: boolean = false
+        let title: string = ''
+        let description: string = ''
 
         return {
             date,
-            modal
+            title,
+            description
         }
     },
     computed: {
