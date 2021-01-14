@@ -9,12 +9,7 @@
                 {{ isNew ? 'New' : 'Edit' }} Task
             </v-card-title>
             <v-card class="pa-1">
-                <form @submit.prevent>
-                    <DatePickerModal
-                        label="Task Date"
-                        v-model="date"
-                        clearable
-                    />
+                <form @submit.prevent="save">
                     <v-text-field
                         v-model="title"
                         prepend-icon="mdi-format-title"
@@ -32,6 +27,19 @@
                         maxlength="128"
                         clearable
                     ></v-textarea>
+                    <v-divider></v-divider>
+                    <DatePickerModal
+                        label="Task Date"
+                        v-model="date"
+                        clearable
+                    />
+                    <v-divider></v-divider>
+                    <div class="d-flex align-center justify-center">
+                        <v-btn text color="error" small @click="goBack">
+                            Cancel
+                        </v-btn>
+                        <v-btn text color="success" type="submit">Save</v-btn>
+                    </div>
                 </form>
             </v-card>
         </v-card>
@@ -40,6 +48,10 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { mapMutations } from 'vuex'
+
+import { GO_BACK } from '@/@types/mutation-types'
+
 export default Vue.extend({
     name: 'EditTask',
     data() {
@@ -56,6 +68,14 @@ export default Vue.extend({
     computed: {
         isNew(): boolean {
             return this.$store.state.editTask === 'new'
+        }
+    },
+    methods: {
+        ...mapMutations({
+            goBack: GO_BACK
+        }),
+        save() {
+            console.log('save')
         }
     }
 })

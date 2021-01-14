@@ -1,5 +1,6 @@
 <template>
     <EditTask v-if="$store.state.editTask" />
+    <EditHabit v-else-if="$store.state.editHabit" />
     <div v-else>
         <v-container class="my-1">
             <v-row>

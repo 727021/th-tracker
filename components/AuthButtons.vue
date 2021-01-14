@@ -11,11 +11,15 @@
 
 <script lang="ts">
 import Vue from 'vue'
+
+import { RESET_STATE } from '@/@types/mutation-types'
+
 export default Vue.extend({
     name: 'AuthButtons',
     methods: {
         async logout() {
             await this.$auth.logout()
+            this.$store.commit(RESET_STATE)
         },
         login() {
             this.$router.push('/auth')

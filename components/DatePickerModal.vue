@@ -19,7 +19,8 @@
         <v-date-picker
             v-model="date"
             scrollable
-            :allowed-dates="allowPast ? () => true : allowedDates"
+            :min="new Date().toISOString().substring(0, 10)"
+            :allowed-dates="allowedDates"
         >
             <v-spacer></v-spacer>
             <v-btn text color="primary" @click="modal = false">Cancel</v-btn>
@@ -36,7 +37,8 @@ export default Vue.extend({
         value: String,
         label: String,
         allowPast: Boolean,
-        clearable: Boolean
+        clearable: Boolean,
+        allowedDates: Function
     },
     data() {
         let modal: boolean = false
@@ -51,11 +53,6 @@ export default Vue.extend({
         OK() {
             this.$refs['dialog'].save(this.date)
             this.$emit('input', this.date)
-        },
-        allowedDates(d: string) {
-            const now = new Date()
-            now.setDate(now.getDate() - 1)
-            return new Date(d) >= now
         }
     }
 })

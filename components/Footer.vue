@@ -2,6 +2,7 @@
     <v-footer
         padless
         fixed
+        app
         class="d-flex justify-space-between align-center py-2 px-5"
     >
         <span class="text--secondary"
