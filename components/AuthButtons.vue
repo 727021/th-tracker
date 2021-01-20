@@ -10,20 +10,18 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
+import { Vue, Component } from 'vue-property-decorator'
+import { RESET_STATE } from '~/@types/mutation-types'
 
-import { RESET_STATE } from '@/@types/mutation-types'
-
-export default Vue.extend({
-    name: 'AuthButtons',
-    methods: {
-        async logout() {
-            await this.$auth.logout()
-            this.$store.commit(RESET_STATE)
-        },
-        login() {
-            this.$router.push('/auth')
-        }
+@Component
+export default class AuthButtons extends Vue {
+    async logout() {
+        await this.$auth.logout()
+        this.$store.commit(RESET_STATE)
     }
-})
+
+    login() {
+        this.$router.push('/auth')
+    }
+}
 </script>

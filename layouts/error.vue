@@ -6,10 +6,11 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
+import 'reflect-metadata'
+import { Vue, Component, Prop } from 'vue-property-decorator'
 
-export default Vue.extend({
-    props: ['error'],
-    layout: ctx => (ctx.isMobile ? 'mobile' : 'default')
-})
+@Component
+export default class Error extends Vue {
+    @Prop() readonly error!: any
+}
 </script>

@@ -72,132 +72,109 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
+import { Vue, Component } from 'vue-property-decorator'
 import { StatusCodes } from 'http-status-codes'
 
-interface form {
-    username: {
-        value: string
-        error: string
-    }
-    email: {
-        value: string
-        error: string
-    }
-    password: {
-        value: string
-        error: string
-        show: boolean
-    }
-    confirm: {
-        value: string
-        error: string
-        show: boolean
-    }
-    register: boolean
+interface input {
+    value: string
+    error: string
 }
 
-export default Vue.extend({
-    name: 'Index',
-    head: { title: 'Log In or Sign Up' },
-    auth: 'guest',
-    data: () => {
-        const form: form = {
-            username: {
-                value: '',
-                error: ''
-            },
-            email: {
-                value: '',
-                error: ''
-            },
-            password: {
-                value: '',
-                error: '',
-                show: false
-            },
-            confirm: {
-                value: '',
-                error: '',
-                show: false
-            },
-            register: false
-        }
+interface hideable extends input {
+    show: boolean
+}
 
-        return { ...form }
-    },
-    methods: {
-        toggleRegister() {
-            this.email.value = ''
-            this.confirm.value = ''
-            this.username.error = ''
-            this.email.error = ''
-            this.password.error = ''
-            this.confirm.error = ''
-            this.register = !this.register
-        },
-        async onSubmit() {
-            if (this.register) {
-                try {
-                    const { username } = await this.$axios.$post(
-                        '/api/auth/register',
-                        {
-                            username: this.username.value,
-                            password: this.password.value,
-                            email: this.email.value,
-                            confirm: this.confirm.value
-                        }
-                    )
+@Component({ head: { title: 'Log In or Sign Up' }, auth: 'guest' })
+export default class Auth extends Vue {
+    username: input = {
+        value: '',
+        error: ''
+    }
+    email: input = {
+        value: '',
+        error: ''
+    }
+    password: hideable = {
+        value: '',
+        error: '',
+        show: false
+    }
+    confirm: hideable = {
+        value: '',
+        error: '',
+        show: false
+    }
+    register: boolean = false
 
-                    this.password.value = ''
-                    this.username.value = username
-                    this.register = false
-                } catch (err) {
-                    if (
-                        err.response.status !== StatusCodes.UNPROCESSABLE_ENTITY
-                    )
-                        return this.$nuxt.error({
-                            message: err.message ?? err.response?.data?.error,
-                            statusCode: err.response?.status
-                        })
+    toggleRegister() {
+        this.email.value = ''
+        this.confirm.value = ''
+        this.username.error = ''
+        this.email.error = ''
+        this.password.error = ''
+        this.confirm.error = ''
+        this.register = !this.register
+    }
 
-                    for (const { param, msg } of err.response.data.errors) {
-                        switch (param) {
-                            case 'username':
-                                this.username.error = msg
-                                break
-                            case 'email':
-                                this.email.error = msg
-                                break
-                            case 'password':
-                                this.password.error = msg
-                                break
-                            case 'confirm':
-                                this.confirm.error = msg
-                                break
-                        }
+    async onSubmit() {
+        if (this.register) {
+            try {
+                const { username } = await this.$axios.$post(
+                    '/api/auth/register',
+                    {
+                        username: this.username.value,
+                        password: this.password.value,
+                        email: this.email.value,
+                        confirm: this.confirm.value
+                    }
+                )
+
+                this.password.value = ''
+                this.username.value = username
+                this.register = false
+            } catch (err) {
+                if (err.response.status !== StatusCodes.UNPROCESSABLE_ENTITY)
+                    return this.$nuxt.error({
+                        message: err.message ?? err.response?.data?.error,
+                        statusCode: err.response?.status
+                    })
+
+                for (const { param, msg } of err.response.data.errors) {
+                    switch (param) {
+                        case 'username':
+                            this.username.error = msg
+                            break
+                        case 'email':
+                            this.email.error = msg
+                            break
+                        case 'password':
+                            this.password.error = msg
+                            break
+                        case 'confirm':
+                            this.confirm.error = msg
+                            break
                     }
                 }
-            } else {
-                try {
-                    await this.$auth.loginWith('local', {
-                        data: {
-                            username: this.username.value,
-                            password: this.password.value
-                        }
+            }
+        } else {
+            try {
+                await this.$auth.loginWith('local', {
+                    data: {
+                        username: this.username.value,
+                        password: this.password.value
+                    }
+                })
+            } catch (err) {
+                if (err.response.status === StatusCodes.CONFLICT) {
+                    this.username.error = err.response.data.error
+                    this.password.error = ' '
+                } else
+                    this.$nuxt.error({
+                        message: err.message ?? err.response?.data?.error,
+                        statusCode: err.response?.status
                     })
-                } catch (err) {
-                    if (err.response.status === StatusCodes.CONFLICT) {
-                        this.username.error = err.response.data.error
-                        this.password.error = ' '
-                    } else
-                        this.$nuxt.error({
-                            message: err.message ?? err.response?.data?.error,
-                            statusCode: err.response?.status
-                        })
-                }
             }
         }
     }
-})
+}
 </script>

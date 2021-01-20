@@ -81,69 +81,54 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
-import { mapMutations } from 'vuex'
+import { Vue, Component } from 'vue-property-decorator'
+import { Mutation } from 'vuex-class'
+import { GO_BACK } from '~/@types/mutation-types'
 
-import { GO_BACK } from '@/@types/mutation-types'
+@Component
+export default class EditHabit extends Vue {
+    startDate: string = this.$store.state.selectedDay
+    endDate: string = ''
+    title: string = ''
+    description: string = ''
+    repeat: string = 'Daily'
+    days: any[] = []
+    readonly dayList: string[] = [
+        'Sun',
+        'Mon',
+        'Tue',
+        'Wed',
+        'Thu',
+        'Fri',
+        'Sat'
+    ]
+    completion: string = 'Checkbox'
 
-export default Vue.extend({
-    name: 'EditHabit',
-    data() {
-        let startDate: string = this.$store.state.selectedDay
-        let endDate: string = ''
-        let title: string = ''
-        let description: string = ''
-        let repeat: string = 'Daily'
-        let days: any[] = []
-        const dayList: string[] = [
-            'Sun',
-            'Mon',
-            'Tue',
-            'Wed',
-            'Thu',
-            'Fri',
-            'Sat'
-        ]
-        let completion: string = 'Checkbox'
-
-        return {
-            startDate,
-            endDate,
-            title,
-            description,
-            repeat,
-            days,
-            dayList,
-            completion
-        }
-    },
-    computed: {
-        isNew(): boolean {
-            return this.$store.state.editHabit === 'new'
-        },
-        completionIcon(): string {
-            switch (this.completion) {
-                case 'Text':
-                    return 'mdi-form-textbox'
-                case 'Stars':
-                    return 'mdi-star-half-full'
-                case 'Number':
-                    return 'mdi-counter'
-                default:
-                    return 'mdi-checkbox-marked-outline'
-            }
-        }
-    },
-    methods: {
-        ...mapMutations({
-            goBack: GO_BACK
-        }),
-        save() {
-            console.log('save')
-        },
-        allowedDates(d: string) {
-            return new Date(d) >= new Date(this.startDate)
+    get isNew(): boolean {
+        return this.$store.state.editHabit === 'new'
+    }
+    
+    get completionIcon(): string {
+        switch (this.completion) {
+            case 'Text':
+                return 'mdi-form-textbox'
+            case 'Stars':
+                return 'mdi-star-half-full'
+            case 'Number':
+                return 'mdi-counter'
+            default:
+                return 'mdi-checkbox-marked-outline'
         }
     }
-})
+
+    @Mutation(GO_BACK) goBack!: any
+
+    save() {
+        console.log('save')
+    }
+
+    allowedDates(d: string): boolean {
+        return new Date(d) >= new Date(this.startDate)
+    }
+}
 </script>

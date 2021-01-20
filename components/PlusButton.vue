@@ -46,25 +46,15 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
-import { mapMutations } from 'vuex'
+import { Vue, Component } from 'vue-property-decorator'
+import { Mutation } from 'vuex-class'
+import { NEW_HABIT, NEW_TASK } from '~/@types/mutation-types'
 
-import { NEW_TASK, NEW_HABIT } from '@/@types/mutation-types'
+@Component
+export default class PlusButton extends Vue {
+    fab: boolean = false
 
-export default Vue.extend({
-    name: 'PlusButton',
-    data: () => {
-        let fab: boolean = false
-
-        return {
-            fab
-        }
-    },
-    methods: {
-        ...mapMutations({
-            newTask: NEW_TASK,
-            newHabit: NEW_HABIT
-        })
-    }
-})
+    @Mutation(NEW_TASK) newTask!: any
+    @Mutation(NEW_HABIT) newHabit!: any
+}
 </script>

@@ -30,30 +30,28 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
-export default Vue.extend({
-    name: 'DatePickerModal',
-    props: {
-        value: String,
-        label: String,
-        allowPast: Boolean,
-        clearable: Boolean,
-        allowedDates: Function
-    },
-    data() {
-        let modal: boolean = false
-        let date: string = this.value
+import 'reflect-metadata'
+import { Vue, Component, Prop } from 'vue-property-decorator'
 
-        return {
-            modal,
-            date
-        }
-    },
-    methods: {
-        OK() {
-            this.$refs['dialog'].save(this.date)
-            this.$emit('input', this.date)
-        }
+@Component
+export default class DatePickerModal extends Vue {
+    @Prop() readonly value!: string
+    @Prop() readonly label!: string
+    @Prop() readonly allowPast!: boolean
+    @Prop() readonly clearable!: boolean
+    @Prop() readonly allowedDates!: (d: string) => boolean
+
+    modal: boolean = false
+    date: string = this.value
+
+    $refs!: {
+        // This fix feels hacky. Need to find something better.
+        dialog: any
     }
-})
+
+    OK() {
+        this.$refs.dialog.save(this.date)
+        this.$emit('input', this.date)
+    }
+}
 </script>

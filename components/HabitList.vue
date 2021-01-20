@@ -25,15 +25,10 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
-export default Vue.extend({
-    name: 'HabitList',
-    data: () => {
-        const loading: boolean = true
+import { Vue, Component } from 'vue-property-decorator'
 
-        return {
-            loading
-        }
-    }
-})
+@Component
+export default class HabitList extends Vue {
+    loading: boolean = true
+}
 </script>

@@ -5,23 +5,15 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
-import { mapGetters, mapMutations } from 'vuex'
+import { Vue, Component } from 'vue-property-decorator'
+import { Getter, Mutation } from 'vuex-class'
 
-import { CAN_GO_BACK } from '@/@types/getter-types'
-import { GO_BACK } from '@/@types/mutation-types'
+import { CAN_GO_BACK } from '~/@types/getter-types'
+import { GO_BACK } from '~/@types/mutation-types'
 
-export default Vue.extend({
-    name: 'BackButton',
-    computed: {
-        ...mapGetters({
-            canGoBack: CAN_GO_BACK
-        })
-    },
-    methods: {
-        ...mapMutations({
-            goBack: GO_BACK
-        })
-    }
-})
+@Component
+export default class BackButton extends Vue {
+    @Getter(CAN_GO_BACK) canGoBack: any
+    @Mutation(GO_BACK) goBack: any
+}
 </script>

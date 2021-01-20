@@ -17,7 +17,7 @@ const initialState = (): RootState => ({
     i: 0
 })
 
-export const state = initialState()
+export const state = initialState
 
 type Snapshot = {
     selectedDay: string

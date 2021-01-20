@@ -24,17 +24,13 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
+import 'reflect-metadata'
+import { Vue, Component, Prop } from 'vue-property-decorator'
 
-export default Vue.extend({
-    name: 'DarkToggle',
-    props: {
-        value: Boolean,
-        buttonTag: {
-            type: String,
-            default: 'button'
-        },
-        fontAwesome: String
-    }
-})
+@Component
+export default class DarkToggle extends Vue {
+    @Prop() readonly value!: boolean | undefined
+    @Prop({ default: 'button' }) readonly buttonTag!: string
+    @Prop() readonly fontAwesome!: string | undefined
+}
 </script>

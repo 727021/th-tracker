@@ -19,32 +19,29 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
+import { Vue, Component } from 'vue-property-decorator'
+import { SET_DAY } from '~/@types/mutation-types'
 
-import { SET_DAY } from '@/@types/mutation-types'
+type calendarEvent = boolean | string | string[]
 
-export default Vue.extend({
-    name: 'Calendar',
-    computed: {
-        selectedDay: {
-            get(): string {
-                return this.$store.state.selectedDay
-            },
-            set(d: string) {
-                this.$store.commit(SET_DAY, d)
-            }
-        }
-    },
-    methods: {
-        events(d: string) {
-            const events: { [key: string]: boolean | string | string[] } = {
-                '2021-01-15': 'success',
-                '2021-01-23': 'warning',
-                '2021-01-11': ['error', 'purple']
-            }
-
-            return events[d]
-        }
+@Component
+export default class Calendar extends Vue {
+    get selectedDay(): string {
+        return this.$store.state.selectedDay
     }
-})
+
+    set selectedDay(d: string) {
+        this.$store.commit(SET_DAY, d)
+    }
+
+    events(d: string): calendarEvent {
+        const events: { [key: string]: calendarEvent } = {
+            '2021-01-15': 'success',
+            '2021-01-23': 'warning',
+            '2021-01-11': ['error', 'purple']
+        }
+
+        return events[d]
+    }
+}
 </script>

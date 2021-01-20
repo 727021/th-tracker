@@ -47,36 +47,24 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
-import { mapMutations } from 'vuex'
+import { Vue, Component } from 'vue-property-decorator'
+import { Mutation } from 'vuex-class'
+import { GO_BACK } from '~/@types/mutation-types'
 
-import { GO_BACK } from '@/@types/mutation-types'
+@Component
+export default class EditTask extends Vue {
+    date: string = this.$store.state.selectedDay
+    title: string = ''
+    description: string = ''
 
-export default Vue.extend({
-    name: 'EditTask',
-    data() {
-        let date: string = this.$store.state.selectedDay
-        let title: string = ''
-        let description: string = ''
-
-        return {
-            date,
-            title,
-            description
-        }
-    },
-    computed: {
-        isNew(): boolean {
-            return this.$store.state.editTask === 'new'
-        }
-    },
-    methods: {
-        ...mapMutations({
-            goBack: GO_BACK
-        }),
-        save() {
-            console.log('save')
-        }
+    get isNew(): boolean {
+        return this.$store.state.editTask === 'new'
     }
-})
+
+    @Mutation(GO_BACK) goBack!: any
+
+    save() {
+        console.log('save')
+    }
+}
 </script>
