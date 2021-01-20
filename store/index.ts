@@ -13,8 +13,7 @@ const initialState = (): RootState => ({
     selectedDay: new Date().toISOString().substring(0, 10),
     editTask: undefined,
     editHabit: undefined,
-    history: [],
-    i: 0
+    history: []
 })
 
 export const state = initialState
@@ -23,14 +22,12 @@ type Snapshot = {
     selectedDay: string
     editTask?: string
     editHabit?: string
-    i: number
 }
 
 export type RootState = {
     selectedDay: string
     editTask?: string
     editHabit?: string
-    i: number
     history: Snapshot[]
 }
 
@@ -46,7 +43,6 @@ export const mutations: MutationTree<RootState> = {
             s.selectedDay = prev?.selectedDay
             s.editTask = prev?.editTask
             s.editHabit = prev?.editHabit
-            s.i = prev?.i || 0
         }
     },
     [SET_DAY]: (s, day: string) => {
@@ -72,8 +68,7 @@ const takeSnapshot = (s: RootState) => {
     s.history.push({
         selectedDay: s.selectedDay,
         editTask: s.editTask,
-        editHabit: s.editHabit,
-        i: s.i
+        editHabit: s.editHabit
     })
 }
 
