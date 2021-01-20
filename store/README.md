@@ -1,10 +1,12 @@
 # STORE
 
-**This directory is not required, you can delete it if you don't want to use it.**
+This file contains a description of the default application state, including vuex modules used in the application
 
-This directory contains your Vuex Store files.
-Vuex Store option is implemented in the Nuxt.js framework.
+## RootState
 
-Creating a file in this directory automatically activates the option in the framework.
-
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/guide/vuex-store).
+| Property    | Type                                     | Description                                                            |
+| ----------- | ---------------------------------------- | ---------------------------------------------------------------------- |
+| selectedDay | `string`                                 | ISO date string representing the currently selected calendar day       |
+| editTask    | `string | undefined`                     | `'new'` for a newly created task, or the id of the task being edited   |
+| editHabit   | `string | undefined`                     | `'new'` for a newly created habit, or the id of the habit being edited |
+| history     | `[{ selectedDay, editTask, editHabit }]` | A list of state snapshots used to revert to a previous state           |
