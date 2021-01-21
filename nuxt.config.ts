@@ -1,5 +1,5 @@
 import { NuxtConfig } from '@nuxt/types'
-import colors from 'vuetify/es5/util/colors'
+// import colors from 'vuetify/es5/util/colors'
 
 const config: NuxtConfig = {
     server: {
@@ -148,6 +148,9 @@ const config: NuxtConfig = {
             //         success: colors.green.accent3
             //     }
             // }
+        },
+        treeShake: {
+            components: ['VBtn']
         }
     },
 

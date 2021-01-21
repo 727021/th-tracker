@@ -26,3 +26,23 @@ $ npm run dev
 $ npm run build
 $ npm run start
 ```
+
+## TODO List
+
+- [X] Fix DarkToggle bug
+- [ ] Replace mdi icons with fa icons
+- [ ] Task API
+- [ ] Task creation
+- [ ] Task list
+- [ ] Task editing
+- [ ] Task Completion
+- [ ] Habit API
+- [ ] Habit creation
+- [ ] Habit list
+- [ ] Habit editing
+- [ ] Habit tracking
+- [ ] Calendar events from API
+- [ ] Password resets
+- [ ] Account confirmation
+- [ ] Mobile layout
+- [ ] Rename Heroku app
