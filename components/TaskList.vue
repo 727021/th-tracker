@@ -1,6 +1,10 @@
 <template>
     <v-card color="warning pa-1">
-        <v-card-title class="white--text">Tasks</v-card-title>
+        <v-card-title class="white--text text-h4">
+            Tasks
+            <v-spacer></v-spacer>
+            <v-icon large>mdi-format-list-checkbox</v-icon>
+        </v-card-title>
 
         <div v-if="loading">
             <v-skeleton-loader type="list-item-two-line"></v-skeleton-loader>

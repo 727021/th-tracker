@@ -54,31 +54,7 @@ const config: NuxtConfig = {
         // https://go.nuxtjs.dev/typescript
         '@nuxt/typescript-build',
         // https://go.nuxtjs.dev/vuetify
-        '@nuxtjs/vuetify',
-        [
-            '@nuxtjs/fontawesome',
-            {
-                component: 'fa',
-                suffix: true,
-                icons: {
-                    regular: [
-                        'faMoon',
-                        'faSun',
-                        'faCopyright',
-                        'faCalendarAlt'
-                    ],
-                    solid: [
-                        'faSignOutAlt',
-                        'faSignInAlt',
-                        'faChevronLeft',
-                        'faPlus',
-                        'faTimes',
-                        'faTasks'
-                    ],
-                    brands: ['faGithub']
-                }
-            }
-        ]
+        '@nuxtjs/vuetify'
     ],
 
     // Modules (https://go.nuxtjs.dev/config-modules)

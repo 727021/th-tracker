@@ -7,11 +7,11 @@
                 <v-col>
                     <Calendar />
                 </v-col>
-                <v-divider style="min-height: 85vh" vertical></v-divider>
+                <v-divider style="min-height: 80vh" vertical></v-divider>
                 <v-col>
                     <TaskList />
                 </v-col>
-                <v-divider style="min-height: 85vh" vertical></v-divider>
+                <v-divider style="min-height: 80vh" vertical></v-divider>
                 <v-col>
                     <HabitList />
                 </v-col>

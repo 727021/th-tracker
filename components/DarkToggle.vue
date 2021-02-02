@@ -3,21 +3,13 @@
         <span v-if="value">
             <slot name="dark">
                 Dark
-                <component
-                    v-if="fontAwesome"
-                    :is="fontAwesome"
-                    :icon="['far', 'moon']"
-                />
+                <v-icon small>mdi-theme-light-dark</v-icon>
             </slot>
         </span>
         <span v-else>
             <slot name="light">
                 Light
-                <component
-                    v-if="fontAwesome"
-                    :is="fontAwesome"
-                    :icon="['far', 'sun']"
-                />
+                <v-icon small>mdi-theme-light-dark</v-icon>
             </slot>
         </span>
     </component>
@@ -31,6 +23,5 @@ import { Vue, Component, Prop } from 'vue-property-decorator'
 export default class DarkToggle extends Vue {
     @Prop() readonly value!: boolean | undefined
     @Prop({ default: 'button' }) readonly buttonTag!: string
-    @Prop() readonly fontAwesome!: string | undefined
 }
 </script>

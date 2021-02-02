@@ -9,7 +9,7 @@
     >
         <template #activator>
             <v-btn dark fab color="success" v-model="fab">
-                <fa-icon size="lg" :icon="fab ? 'times' : 'plus'" />
+                <v-icon large>mdi-{{fab ? 'close' : 'plus'}}</v-icon>
             </v-btn>
         </template>
         <v-tooltip left>
@@ -22,7 +22,7 @@
                     v-on="on"
                     @click="newTask"
                 >
-                    <fa-icon size="lg" icon="tasks" />
+                    <v-icon large>mdi-format-list-checkbox</v-icon>
                 </v-btn>
             </template>
             <span>New Task</span>
@@ -37,7 +37,7 @@
                     v-on="on"
                     @click="newHabit"
                 >
-                    <fa-icon size="lg" :icon="['far', 'calendar-alt']" />
+                    <v-icon large>mdi-calendar-month</v-icon>
                 </v-btn>
             </template>
             <span>New Habit</span>

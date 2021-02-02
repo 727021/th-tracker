@@ -1,10 +1,10 @@
 <template>
     <div>
         <v-btn v-if="$auth.loggedIn" @click="logout" plain>
-            <span>Log Out <fa-icon icon="sign-out-alt" /></span>
+            <span>Log Out <v-icon dense>mdi-login</v-icon></span>
         </v-btn>
         <v-btn v-else @click="login" plain>
-            <span>Log In <fa-icon icon="sign-in-alt" /></span>
+            <span>Log In <v-icon dense>mdi-logout</v-icon></span>
         </v-btn>
     </div>
 </template>

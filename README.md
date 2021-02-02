@@ -30,7 +30,7 @@ $ npm run start
 ## TODO List
 
 - [X] Fix DarkToggle bug
-- [ ] Replace fa icons with mdi icons
+- [X] Replace fa icons with mdi icons
 - [ ] Task API
 - [ ] Task creation
 - [ ] Task list

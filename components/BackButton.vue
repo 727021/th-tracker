@@ -1,6 +1,6 @@
 <template>
     <v-btn v-if="canGoBack" @click="goBack" plain>
-        <span><fa-icon icon="chevron-left" /> Back</span>
+        <span><v-icon>mdi-chevron-left</v-icon> Back</span>
     </v-btn>
 </template>
 

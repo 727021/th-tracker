@@ -1,6 +1,10 @@
 <template>
     <v-card color="purple pa-1">
-        <v-card-title class="white--text">Habits</v-card-title>
+        <v-card-title class="white--text text-h4">
+            Habits
+            <v-spacer></v-spacer>
+            <v-icon large>mdi-calendar-month</v-icon>
+        </v-card-title>
 
         <div v-if="loading">
             <v-skeleton-loader type="list-item-two-line"></v-skeleton-loader>

@@ -6,7 +6,7 @@
         class="d-flex justify-space-between align-center py-2 px-5"
     >
         <span class="text--secondary"
-            ><fa-icon size="sm" :icon="['far', 'copyright']" />
+            ><v-icon small class="text--secondary">mdi-copyright</v-icon>
             {{ new Date().getFullYear() }}</span
         >
         <span>
@@ -14,7 +14,6 @@
                 v-model="$vuetify.theme.dark"
                 button-tag="v-btn"
                 plain
-                font-awesome="fa-icon"
             />
             <v-btn
                 icon
@@ -22,7 +21,7 @@
                 href="https://github.com/727021/Todo-Tracker"
                 target="_blank"
             >
-                <fa-icon size="lg" :icon="['fab', 'github']" />
+                <v-icon small>mdi-github</v-icon>
             </v-btn>
         </span>
     </v-footer>
