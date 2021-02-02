@@ -1,9 +1,25 @@
 <template>
     <v-card color="warning pa-1">
         <v-card-title class="white--text text-h4">
+            <v-icon large>mdi-format-list-checkbox</v-icon>
             Tasks
             <v-spacer></v-spacer>
-            <v-icon large>mdi-format-list-checkbox</v-icon>
+        <v-tooltip left>
+            <template #activator="{ on, attrs }">
+                <v-btn
+                    dark
+                    fab
+                    small
+                    color="success"
+                    v-bind="attrs"
+                    v-on="on"
+                    @click="newTask"
+                >
+                    <v-icon large>mdi-plus</v-icon>
+                </v-btn>
+            </template>
+            <span>New Task</span>
+        </v-tooltip>
         </v-card-title>
 
         <div v-if="loading">
@@ -30,9 +46,13 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'
+import { Mutation } from 'vuex-class'
+import { NEW_TASK } from '~/@types/mutation-types'
 
 @Component
 export default class TaskList extends Vue {
     loading: boolean = true
+
+    @Mutation(NEW_TASK) newTask!: any
 }
 </script>

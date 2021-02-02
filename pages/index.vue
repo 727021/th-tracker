@@ -17,7 +17,6 @@
                 </v-col>
             </v-row>
         </v-container>
-        <PlusButton />
     </div>
 </template>
 
