@@ -6,7 +6,7 @@ import { sign, decode } from 'jsonwebtoken'
 import { SALT_ROUNDS, JWT_EXPIRES_IN } from '../util/constants'
 import validationErrors from '../util/validationErrors'
 
-import User from '../models/user'
+import { User } from '../models'
 
 export const postRegister = async (
     req: Request,
