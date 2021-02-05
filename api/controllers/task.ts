@@ -19,7 +19,7 @@ export const getTasks = async (
         message: 'Tasks in date range',
         req: { query: { start, end } },
         res:
-            '{ id: string, title: string, description: string, date: string, completed: boolean }[]'
+            '{ _id: string, title: string, description: string, date: string, completed: boolean }[]'
     })
 }
 
@@ -36,7 +36,7 @@ export const getTask = async (
         message: 'Single task by id',
         req: { params: { id } },
         res:
-            '{ id: string, title: string, description: string, date: string, completed: boolean }'
+            '{ _id: string, title: string, description: string, date: string, completed: boolean }'
     })
 }
 
@@ -55,7 +55,7 @@ export const createTask = async (
         message: 'Create new task',
         req: { body: { title, description, date } },
         res:
-            '{ id: string, title: string, description: string, date: string, completed: boolean }'
+            '{ _id: string, title: string, description: string, date: string, completed: boolean }'
     })
 }
 
@@ -75,7 +75,7 @@ export const editTask = async (
         message: 'Edit existing task',
         req: { params: { id }, body: { title, description, date } },
         res:
-            '{ id: string, title: string, description: string, date: string, completed: boolean }'
+            '{ _id: string, title: string, description: string, date: string, completed: boolean }'
     })
 }
 
@@ -91,7 +91,7 @@ export const toggleComplete = async (
     res.status(StatusCodes.OK).send({
         message: 'Toggle task completion',
         req: { params: { id } },
-        res: '{ id: string, complete: boolean }'
+        res: '{ _id: string, complete: boolean }'
     })
 }
 
@@ -107,6 +107,6 @@ export const deleteTask = async (
     res.status(StatusCodes.OK).send({
         message: 'Delete task',
         req: { params: { id } },
-        res: '{ id: string }'
+        res: '{ _id: string }'
     })
 }

@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import { body, query, param } from 'express-validator'
 
+import { ISODate, hasLetters } from '../util/regex'
 import {
     createTask,
     deleteTask,
@@ -11,24 +12,6 @@ import {
 } from '../controllers/task'
 
 const router: Router = Router()
-
-const ISODate: RegExp = /^\d{4}-\d{2}-\d{2}$/
-const hasLetters = ({
-    min,
-    max
-}: { min?: number; max?: number } = {}): RegExp => {
-    let num = '1,'
-    if (min && max) {
-        if (min > max) {
-            let t = min
-            min = max
-            max = t
-        }
-        num = `${min},${max}`
-    } else if (min || max) num = `${min || ''},${max || ''}`
-
-    return new RegExp(`[A-Za-z]{${num}}`)
-}
 
 router
     .get(
@@ -55,13 +38,37 @@ router
                 .withMessage('Title must be between 3 and 64 characters')
                 .matches(hasLetters())
                 .withMessage('Title must contain at least 1 letter'),
-            body('description'),
-            body('date')
+            body('description')
+                .trim()
+                .isLength({ max: 128 })
+                .withMessage(
+                    'Description cannot be longer than 128 characters'
+                ),
+            body('date', 'Invalid date').trim().matches(ISODate)
         ],
         createTask
     )
-    .put('/:id', [], editTask)
-    .patch('/:id', [], toggleComplete)
-    .delete('/:id', [], deleteTask)
+    .put(
+        '/:id',
+        [
+            param('id', 'Invalid task id').isMongoId(),
+            body('title')
+                .trim()
+                .isLength({ min: 3, max: 64 })
+                .withMessage('Title must be between 3 and 64 characters')
+                .matches(hasLetters())
+                .withMessage('Title must contain at least 1 letter'),
+            body('description')
+                .trim()
+                .isLength({ max: 128 })
+                .withMessage(
+                    'Description cannot be longer than 128 characters'
+                ),
+            body('date', 'Invalid date').trim().matches(ISODate)
+        ],
+        editTask
+    )
+    .patch('/:id', [param('id', 'Invalid task id').isMongoId()], toggleComplete)
+    .delete('/:id', [param('id', 'Invalid task id').isMongoId()], deleteTask)
 
 export default router

@@ -16,7 +16,6 @@ This file contains a list of the components used in this application
   - [Footer](#footer)
   - [HabitList](#habitlist)
   - [Header](#header)
-  - [PlusButton](#plusbutton)
   - [TaskList](#tasklist)
 
 ## AuthButtons
@@ -84,10 +83,6 @@ This file contains a list of the components used in this application
 ## Header
 
 > Page header containing [BackButton](#backbutton) and [AuthButtons](#authbuttons)
-
-## PlusButton
-
-> Floating action button for creating new habits and tasks
 
 ## TaskList
 

@@ -46,3 +46,4 @@ $ npm run start
 - [ ] Account confirmation
 - [ ] Mobile layout
 - [ ] Rename Heroku app
+- [ ] API docs on GitHub Pages
