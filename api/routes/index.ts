@@ -2,12 +2,16 @@ import { Router, Request, Response, NextFunction } from 'express'
 import { StatusCodes } from 'http-status-codes'
 import HttpException from '../exceptions/HttpException'
 
+import isAuth from '../middleware/auth'
+
 import auth from './auth'
+import task from './task'
 
 const router: Router = Router()
 
 router
     .use('/auth', auth)
+    .use('/task', isAuth, task)
     .get('/', (req: Request, res: Response, next: NextFunction) => {
         res.status(StatusCodes.OK).send({ message: 'Hello, world!' })
     })

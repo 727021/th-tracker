@@ -31,7 +31,7 @@ $ npm run start
 
 - [X] Fix DarkToggle bug
 - [X] Replace fa icons with mdi icons
-- [ ] Task API
+- [X] Task API
 - [ ] Task creation
 - [ ] Task list
 - [ ] Task editing

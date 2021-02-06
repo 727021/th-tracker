@@ -1,13 +1,15 @@
 import { NuxtConfig } from '@nuxt/types'
 // import colors from 'vuetify/es5/util/colors'
 
+const dev: boolean = process.env.NODE_ENV === 'development'
+
 const config: NuxtConfig = {
     server: {
         port: process.env.PORT || 3000,
-        host: '0.0.0.0'
+        host: dev ? 'localhost' : '0.0.0.0'
     },
 
-    dev: process.env.NODE_ENV === 'development',
+    dev,
 
     serverMiddleware: [
         {

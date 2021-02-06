@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express'
 import { StatusCodes } from 'http-status-codes'
 
 import validationErrors from '../util/validationErrors'
+import dateToNumber from '../util/dateToNumber'
 
 import { Task } from '../models'
 
@@ -15,12 +16,22 @@ export const getTasks = async (
     const start: string = req.query.start as string
     const end: string = req.query.end as string
 
-    res.status(StatusCodes.OK).send({
-        message: 'Tasks in date range',
-        req: { query: { start, end } },
-        res:
-            '{ _id: string, title: string, description: string, date: string, completed: boolean }[]'
-    })
+    try {
+        const tasks = await Task.find(
+            {
+                owner: req.user?._id,
+                dateCompare: {
+                    $gte: dateToNumber(start),
+                    $lte: dateToNumber(end)
+                }
+            },
+            '-dateCompare -owner'
+        )
+
+        res.status(StatusCodes.OK).send(tasks)
+    } catch (err) {
+        next(err)
+    }
 }
 
 export const getTask = async (
@@ -32,12 +43,21 @@ export const getTask = async (
 
     const id: string = req.params.id
 
-    res.status(StatusCodes.OK).send({
-        message: 'Single task by id',
-        req: { params: { id } },
-        res:
-            '{ _id: string, title: string, description: string, date: string, completed: boolean }'
-    })
+    try {
+        const task = await Task.findOne(
+            { owner: req.user?._id, _id: id },
+            '-dateCompare -owner'
+        )
+
+        if (!task)
+            return res
+                .status(StatusCodes.NOT_FOUND)
+                .send({ error: 'Task Not Found' })
+
+        res.status(StatusCodes.OK).send(task)
+    } catch (err) {
+        next(err)
+    }
 }
 
 export const createTask = async (
@@ -51,12 +71,25 @@ export const createTask = async (
     const description: string = req.body.description
     const date: string = req.body.date
 
-    res.status(StatusCodes.CREATED).send({
-        message: 'Create new task',
-        req: { body: { title, description, date } },
-        res:
-            '{ _id: string, title: string, description: string, date: string, completed: boolean }'
-    })
+    try {
+        const task = new Task({
+            owner: req.user?._id,
+            title,
+            description,
+            date
+        })
+        const saved = await task.save()
+
+        res.status(StatusCodes.CREATED).send({
+            _id: saved._id,
+            title: saved.title,
+            description: saved.description,
+            date: saved.date,
+            completed: saved.completed
+        })
+    } catch (err) {
+        next(err)
+    }
 }
 
 export const editTask = async (
@@ -71,12 +104,33 @@ export const editTask = async (
     const description: string = req.body.description
     const date: string = req.body.date
 
-    res.status(StatusCodes.OK).send({
-        message: 'Edit existing task',
-        req: { params: { id }, body: { title, description, date } },
-        res:
-            '{ _id: string, title: string, description: string, date: string, completed: boolean }'
-    })
+    try {
+        const task = await Task.findOne(
+            { owner: req.user?._id, _id: id },
+            '-dateCompare -owner'
+        )
+
+        if (!task)
+            return res
+                .status(StatusCodes.NOT_FOUND)
+                .send({ error: 'Task Not Found' })
+
+        task.title = title
+        task.description = description
+        task.date = date
+
+        const saved = await task.save()
+
+        res.status(StatusCodes.OK).send({
+            _id: saved._id,
+            title: saved.title,
+            description: saved.description,
+            date: saved.date,
+            completed: saved.completed
+        })
+    } catch (err) {
+        next(err)
+    }
 }
 
 export const toggleComplete = async (
@@ -88,11 +142,25 @@ export const toggleComplete = async (
 
     const id: string = req.params.id
 
-    res.status(StatusCodes.OK).send({
-        message: 'Toggle task completion',
-        req: { params: { id } },
-        res: '{ _id: string, complete: boolean }'
-    })
+    try {
+        const task = await Task.findOne({ owner: req.user?._id, _id: id })
+
+        if (!task)
+            return res
+                .status(StatusCodes.NOT_FOUND)
+                .send({ error: 'Task Not Found' })
+
+        task.completed = !task.completed
+
+        const saved = await task.save()
+
+        res.status(StatusCodes.OK).send({
+            _id: saved._id,
+            completed: saved.completed
+        })
+    } catch (err) {
+        next(err)
+    }
 }
 
 export const deleteTask = async (
@@ -104,9 +172,19 @@ export const deleteTask = async (
 
     const id: string = req.params.id
 
-    res.status(StatusCodes.OK).send({
-        message: 'Delete task',
-        req: { params: { id } },
-        res: '{ _id: string }'
-    })
+    try {
+        const task = await Task.findOneAndDelete({
+            owner: req.user?._id,
+            _id: id
+        })
+
+        if (!task)
+            return res
+                .status(StatusCodes.NOT_FOUND)
+                .send({ error: 'Task Not Found' })
+
+        res.status(StatusCodes.OK).send({ _id: task._id })
+    } catch (err) {
+        next(err)
+    }
 }

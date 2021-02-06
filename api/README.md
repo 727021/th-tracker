@@ -156,7 +156,7 @@ This file contains a description of each API endpoint used by the Habit Tracker 
 | Status Code | Content                                                                               |
 | ----------- | ------------------------------------------------------------------------------------- |
 | 422         | { errors: [{ msg: string, param: string }] }                                          |
-| 201         | { _id: string, title: string, description: string, date: string, completed: boolean } |
+| 200         | { _id: string, title: string, description: string, date: string, completed: boolean } |
 
 ### PATCH `/api/task/:id` (**Requires Auth**)
 
@@ -173,7 +173,7 @@ This file contains a description of each API endpoint used by the Habit Tracker 
 | Status Code | Content                                      |
 | ----------- | -------------------------------------------- |
 | 422         | { errors: [{ msg: string, param: string }] } |
-| 200         | { _id: string, complete: boolean }           |
+| 200         | { _id: string, completed: boolean }          |
 
 ### DELETE `/api/task/:id` (**Requires Auth**)
 

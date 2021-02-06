@@ -3,6 +3,7 @@ import { body } from 'express-validator'
 
 import { postLogin, getUser, postRegister } from '../controllers/auth'
 import User from '../models/user'
+import isAuth from '../middleware/auth'
 
 const router: Router = Router()
 
@@ -54,6 +55,6 @@ router
         postRegister
     )
     .post('/login', postLogin)
-    .get('/user', getUser)
+    .get('/user', isAuth, getUser)
 
 export default router

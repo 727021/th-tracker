@@ -14,6 +14,7 @@ import {
 const router: Router = Router()
 
 router
+    .get('/:id', [param('id', 'Invalid task id').isMongoId()], getTask)
     .get(
         '/',
         [
@@ -28,7 +29,6 @@ router
         ],
         getTasks
     )
-    .get('/:id', [param('id', 'Invalid task id').isMongoId()], getTask)
     .post(
         '/',
         [
