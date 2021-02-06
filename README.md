@@ -2,7 +2,7 @@
 
 A simple app for tracking habits and tasks, built with Nuxt, Express, MongoDB and TypeScript.
 
-See it working at [https://todo--tracker.herokuapp.com/](https://todo--tracker.herokuapp.com/).
+See it working at [https://th-tracker.herokuapp.com/](https://th-tracker.herokuapp.com/).
 
 ## Build Setup
 
@@ -45,5 +45,5 @@ $ npm run start
 - [ ] Password resets
 - [ ] Account confirmation
 - [ ] Mobile layout
-- [ ] Rename Heroku app
+- [X] Rename Heroku app
 - [ ] API docs on GitHub Pages
