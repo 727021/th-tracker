@@ -4,15 +4,13 @@
     <div v-else>
         <v-container class="my-1">
             <v-row>
-                <v-col>
+                <v-col cols="4">
                     <Calendar />
                 </v-col>
-                <v-divider style="min-height: 80vh" vertical></v-divider>
-                <v-col>
+                <v-col cols="4">
                     <TaskList />
                 </v-col>
-                <v-divider style="min-height: 80vh" vertical></v-divider>
-                <v-col>
+                <v-col cols="4">
                     <HabitList />
                 </v-col>
             </v-row>
@@ -22,7 +20,12 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'
+import { SET_DAY } from '~/@types/action-types'
 
 @Component({ head: { title: 'Home' }, transition: 'slide-right' })
-export default class Index extends Vue {}
+export default class Index extends Vue {
+    mounted() {
+        this.$store.dispatch(SET_DAY, this.$store.state.selectedDay)
+    }
+}
 </script>

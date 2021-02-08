@@ -33,13 +33,15 @@ $ npm run start
 - [X] Replace fa icons with mdi icons
 - [X] Task API
 - [X] Task creation
-- [ ] Task list
-- [ ] Task editing
-- [ ] Task Completion
+- [X] Task list
+- [X] Task editing
+- [ ] Task completion
+- [ ] Task deletion
 - [ ] Habit API
 - [ ] Habit creation
 - [ ] Habit list
 - [ ] Habit editing
+- [ ] Habit deletion
 - [ ] Habit tracking
 - [ ] Calendar events from API
 - [ ] Password resets

@@ -20,7 +20,7 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'
-import { SET_DAY } from '~/@types/mutation-types'
+import { SET_DAY } from '~/@types/action-types'
 
 type calendarEvent = boolean | string | string[]
 
@@ -31,7 +31,7 @@ export default class Calendar extends Vue {
     }
 
     set selectedDay(d: string) {
-        this.$store.commit(SET_DAY, d)
+        this.$store.dispatch(SET_DAY, d)
     }
 
     events(d: string): calendarEvent {

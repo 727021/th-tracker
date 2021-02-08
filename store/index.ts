@@ -1,75 +1,64 @@
 import { GetterTree, ActionTree, MutationTree } from 'vuex'
 
-import { CAN_GO_BACK } from '../@types/getter-types'
 import {
-    GO_BACK,
     NEW_HABIT,
-    NEW_TASK,
     RESET_STATE,
-    SET_DAY
+    SET_DAY as _SET_DAY,
+    SET_TASKS
 } from '../@types/mutation-types'
+import { SET_DAY } from '../@types/action-types'
+import { ITask } from '~/api/models/task'
+
+type Task =
+    | Pick<ITask, 'title' | 'description' | 'date' | 'completed'>
+    | { _id: string }
 
 const initialState = (): RootState => ({
     selectedDay: new Date().toISOString().substring(0, 10),
-    editTask: undefined,
     editHabit: undefined,
-    history: []
+    tasks: []
 })
 
 export const state = initialState
 
-type Snapshot = {
-    selectedDay: string
-    editTask?: string
-    editHabit?: string
-}
-
 export type RootState = {
     selectedDay: string
-    editTask?: string
     editHabit?: string
-    history: Snapshot[]
+    tasks: Task[]
 }
 
-export const getters: GetterTree<RootState, RootState> = {
-    [CAN_GO_BACK]: s => s.history.length > 0
-}
+export const getters: GetterTree<RootState, RootState> = {}
 
 export const mutations: MutationTree<RootState> = {
-    [GO_BACK]: s => {
-        if (s.history.length > 0) {
-            const prev = s.history.pop() as Snapshot
-
-            s.selectedDay = prev?.selectedDay
-            s.editTask = prev?.editTask
-            s.editHabit = prev?.editHabit
-        }
-    },
-    [SET_DAY]: (s, day: string) => {
-        takeSnapshot(s)
+    [_SET_DAY]: (s, day: string) => {
         s.selectedDay = day
-    },
-    [NEW_TASK]: s => {
-        if (s.selectedDay === '') return
-        takeSnapshot(s)
-        s.editTask = 'new'
     },
     [NEW_HABIT]: s => {
         if (s.selectedDay === '') return
-        takeSnapshot(s)
         s.editHabit = 'new'
     },
     [RESET_STATE]: s => {
         Object.assign(s, initialState())
+    },
+    [SET_TASKS]: (s, tasks: Task[]) => {
+        s.tasks = tasks
     }
 }
 
-const takeSnapshot = (s: RootState) => {
-    s.history.push({
-        selectedDay: s.selectedDay,
-        editTask: s.editTask,
-        editHabit: s.editHabit
-    })
+export const actions: ActionTree<RootState, RootState> = {
+    async [SET_DAY]({ commit }, day: string) {
+        try {
+            // Set selected day
+            commit(_SET_DAY, day)
+            // Fetch tasks
+            const tasks: Task[] = await this.$axios.$get<Task[]>(
+                `/api/task?start=${day}&end=${day}`
+            )
+            commit(SET_TASKS, tasks)
+            // Fetch habits
+        } catch (err) {
+            console.error(`Error loading tasks/habits for ${day}`)
+            console.error(err)
+        }
+    }
 }
-
-export const actions: ActionTree<RootState, RootState> = {}

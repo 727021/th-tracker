@@ -1,9 +1,7 @@
 <template>
     <v-app-bar app>
         <v-row align="center">
-            <v-col cols="4" no-gutters>
-                <BackButton />
-            </v-col>
+            <v-col cols="4" no-gutters> </v-col>
             <v-col cols="4" no-gutters align="center">
                 <v-toolbar-title>Tracker</v-toolbar-title>
             </v-col>

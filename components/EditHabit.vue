@@ -83,7 +83,6 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'
 import { Mutation } from 'vuex-class'
-import { GO_BACK } from '~/@types/mutation-types'
 
 @Component
 export default class EditHabit extends Vue {
@@ -107,7 +106,7 @@ export default class EditHabit extends Vue {
     get isNew(): boolean {
         return this.$store.state.editHabit === 'new'
     }
-    
+
     get completionIcon(): string {
         switch (this.completion) {
             case 'Text':
@@ -121,7 +120,9 @@ export default class EditHabit extends Vue {
         }
     }
 
-    @Mutation(GO_BACK) goBack!: any
+    goBack() {
+        this.$router.push('/')
+    }
 
     save() {
         console.log('save')
