@@ -28,6 +28,9 @@ router
             next: NextFunction
         ) => {
             if (!(err instanceof HttpException)) err = new HttpException(err)
+
+            if (process.env.NODE_ENV === 'development') console.error(err)
+
             res.status(err.status).send({
                 message: err.message,
                 status: err.status

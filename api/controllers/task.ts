@@ -76,7 +76,8 @@ export const createTask = async (
             owner: req.user?._id,
             title,
             description,
-            date
+            date,
+            completed: false
         })
         const saved = await task.save()
 

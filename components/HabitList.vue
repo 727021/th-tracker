@@ -1,7 +1,7 @@
 <template>
     <v-card color="purple pa-1">
         <v-card-title class="white--text text-h4">
-            <v-icon large>mdi-calendar-month</v-icon>
+            <v-icon large dark>mdi-calendar-month</v-icon>
             Habits
             <v-spacer></v-spacer>
             <v-tooltip left>

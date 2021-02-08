@@ -1,0 +1,48 @@
+:root
+    touch-action: pan-x pan-y
+    height: 100%
+
+/* Page Transitions */
+$transition-time: 0.5s
+
+%transition-all
+    transition: all $transition-time ease
+
+.page-
+    &enter-active,
+    &leave-active
+        transition: opacity $transition-time
+
+    &enter,
+    &leave-to
+        opacity: 0
+
+.grow-
+    &enter,
+    &leave-to
+        @extend %transition-all
+        transform: scale(0)
+
+    &leave,
+    &enter-to
+        @extend %transition-all
+        transform: scale(1)
+
+.slide-
+    &right-,
+    &left-
+        &leave-to
+            @extend %transition-all
+        &enter-to
+            @extend %transition-all
+            transform: translateX(0)
+    &right-
+        &enter
+            transform: translateX(-100%)
+        &leave-to
+            transform: translateX(100%)
+    &left-
+        &enter
+            transform: translateX(100%)
+        &leave-to
+            transform: translateX(-100%)

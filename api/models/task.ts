@@ -23,7 +23,7 @@ export const taskSchema = new Schema({
     },
     description: {
         type: String,
-        required: true
+        required: false
     },
     date: {
         type: String,

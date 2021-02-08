@@ -18,14 +18,18 @@
                         username.error === '' ? [] : [username.error]
                     "
                 ></v-text-field>
-                <v-text-field
-                    v-show="register"
-                    v-model="email.value"
-                    label="E-Mail Address"
-                    type="email"
-                    autocomplete="email"
-                    :error-messages="email.error === '' ? [] : [email.error]"
-                ></v-text-field>
+                <transition name="slide-down">
+                    <v-text-field
+                        v-if="register"
+                        v-model="email.value"
+                        label="E-Mail Address"
+                        type="email"
+                        autocomplete="email"
+                        :error-messages="
+                            email.error === '' ? [] : [email.error]
+                        "
+                    ></v-text-field>
+                </transition>
                 <v-text-field
                     v-model="password.value"
                     label="Password"
@@ -44,18 +48,20 @@
                         password.error === '' ? [] : [password.error]
                     "
                 ></v-text-field>
-                <v-text-field
-                    v-show="register"
-                    v-model="confirm.value"
-                    label="Confirm Password"
-                    :type="confirm.show ? 'text' : 'password'"
-                    :append-icon="confirm.show ? 'mdi-eye' : 'mdi-eye-off'"
-                    @click:append="confirm.show = !confirm.show"
-                    autocomplete="new-password"
-                    :error-messages="
-                        confirm.error === '' ? [] : [confirm.error]
-                    "
-                ></v-text-field>
+                <transition name="slide-down">
+                    <v-text-field
+                        v-if="register"
+                        v-model="confirm.value"
+                        label="Confirm Password"
+                        :type="confirm.show ? 'text' : 'password'"
+                        :append-icon="confirm.show ? 'mdi-eye' : 'mdi-eye-off'"
+                        @click:append="confirm.show = !confirm.show"
+                        autocomplete="new-password"
+                        :error-messages="
+                            confirm.error === '' ? [] : [confirm.error]
+                        "
+                    ></v-text-field>
+                </transition>
                 <v-btn type="submit" class="d-none"></v-btn>
             </v-form>
             <v-divider></v-divider>
@@ -84,7 +90,7 @@ interface hideable extends input {
     show: boolean
 }
 
-@Component({ head: { title: 'Log In or Sign Up' }, auth: 'guest' })
+@Component({ head: { title: 'Log In or Sign Up' }, auth: 'guest', transition: 'slide-left' })
 export default class Auth extends Vue {
     username: input = {
         value: '',
@@ -178,3 +184,17 @@ export default class Auth extends Vue {
     }
 }
 </script>
+
+<style>
+.slide-down-enter,
+.slide-down-leave-to {
+    transform: scaleX(0);
+    transition: all .5s ease;
+}
+
+.slide-down-leave,
+.slide-down-enter-to {
+    transform: scaleX(1);
+    transition: all .5s ease;
+}
+</style>

@@ -14,6 +14,7 @@
                 v-bind="attrs"
                 v-on="on"
                 :clearable="clearable"
+                :error-messages="errorMessages"
             ></v-text-field>
         </template>
         <v-date-picker
@@ -40,6 +41,7 @@ export default class DatePickerModal extends Vue {
     @Prop() readonly allowPast!: boolean
     @Prop() readonly clearable!: boolean
     @Prop() readonly allowedDates!: (d: string) => boolean
+    @Prop() readonly errorMessages!: string[]
 
     modal: boolean = false
     date: string = this.value

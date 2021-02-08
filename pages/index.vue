@@ -23,6 +23,6 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'
 
-@Component({ head: { title: 'Home' } })
+@Component({ head: { title: 'Home' }, transition: 'slide-right' })
 export default class Index extends Vue {}
 </script>
