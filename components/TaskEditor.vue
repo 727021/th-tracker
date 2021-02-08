@@ -6,7 +6,7 @@
             class="mx-auto pa-1"
         >
             <v-card-title class="white--text">
-                {{ _id ? 'Edit' : 'New' }} Task
+                {{ taskId ? 'Edit' : 'New' }} Task
             </v-card-title>
             <v-card class="pa-1">
                 <form @submit.prevent="save">
@@ -80,22 +80,27 @@ export default class TaskEditor extends Vue {
         value: '',
         error: ''
     }
-    _id: string | undefined = this.id
+    taskId: string | undefined = this.id
 
     async save() {
         this.date.error = ''
         this.title.error = ''
         this.description.error = ''
         try {
-            if (!this._id) {
-                const response = await this.$axios.$post('/api/task', {
+            if (!this.taskId)
+                await this.$axios.$post('/api/task', {
+                    date: this.date.value,
+                    title: this.title.value,
+                    description: this.description.value
+                })
+            else
+                await this.$axios.$put(`/api/task/${this.taskId}`, {
                     date: this.date.value,
                     title: this.title.value,
                     description: this.description.value
                 })
 
-                this._id = response._id
-            }
+            this.$router.push('/')
         } catch (err) {
             if (err.response.status !== StatusCodes.UNPROCESSABLE_ENTITY)
                 return this.$nuxt.error({
@@ -119,14 +124,14 @@ export default class TaskEditor extends Vue {
         }
     }
 
-    async fetch() {
-        if (this._id) {
+    async mounted() {
+        if (this.taskId) {
             const {
                 date,
                 title,
                 description
             }: Editing = await this.$axios.$get<Editing>(
-                `/api/task/${this._id}`
+                `/api/task/${this.taskId}`
             )
 
             this.date.value = date
