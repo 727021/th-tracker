@@ -6,12 +6,14 @@ import isAuth from '../middleware/auth'
 
 import auth from './auth'
 import task from './task'
+import habit from './habit'
 
 const router: Router = Router()
 
 router
     .use('/auth', auth)
     .use('/task', isAuth, task)
+    .use('/habit', isAuth, habit)
     .get('/', (req: Request, res: Response, next: NextFunction) => {
         res.status(StatusCodes.OK).send({ message: 'Hello, world!' })
     })

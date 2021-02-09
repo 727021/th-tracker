@@ -1,6 +1,50 @@
-# Habit Tracker API Reference
+- [Task/Habit Tracker API Reference](#taskhabit-tracker-api-reference)
+      - [Response](#response)
+  - [Auth Endpoints](#auth-endpoints)
+    - [Types](#types)
+    - [POST `/api/auth/register`](#post-apiauthregister)
+      - [Request Body](#request-body)
+      - [Response](#response-1)
+    - [POST `/api/auth/login`](#post-apiauthlogin)
+      - [Request Body](#request-body-1)
+      - [Response](#response-2)
+    - [GET `/api/auth/user`](#get-apiauthuser)
+      - [Response](#response-3)
+  - [Task Endpoints](#task-endpoints)
+    - [Types](#types-1)
+    - [GET `/api/task`](#get-apitask)
+      - [Request Query](#request-query)
+      - [Response](#response-4)
+    - [GET `/api/task/:id`](#get-apitaskid)
+      - [Request Params](#request-params)
+      - [Response](#response-5)
+    - [POST `/api/task`](#post-apitask)
+      - [Request Body](#request-body-2)
+      - [Response](#response-6)
+    - [PUT `/api/task/:id`](#put-apitaskid)
+      - [Request Params](#request-params-1)
+      - [Request Body](#request-body-3)
+      - [Response](#response-7)
+    - [PATCH `/api/task/:id`](#patch-apitaskid)
+      - [Request Params](#request-params-2)
+      - [Response](#response-8)
+    - [DELETE `/api/task/:id`](#delete-apitaskid)
+      - [Request Params](#request-params-3)
+      - [Response](#response-9)
+  - [Habit Endpoints](#habit-endpoints)
+    - [Types](#types-2)
+    - [GET `/api/habit`](#get-apihabit)
+      - [Request Query](#request-query-1)
+      - [Response](#response-10)
+    - [GET `/api/habit/:id`](#get-apihabitid)
+      - [Request Params](#request-params-4)
+      - [Response](#response-11)
 
-This file contains a description of each API endpoint used by the Habit Tracker app. The API is broken into several parts: Auth, Task, and Habit.
+# Task/Habit Tracker API Reference
+
+This file contains a description of each API endpoint used by the Task/Habit Tracker app. The API is broken into several parts: Auth, Task, and Habit. Each section starts with type definitions relevant to its endpoints.
+
+All endpoints require authentication unless otherwise noted.
 
 #### Response
 
@@ -21,9 +65,19 @@ This file contains a description of each API endpoint used by the Habit Tracker 
 
 ## Auth Endpoints
 
+### Types
+
+```typescript
+type User = {
+    _id: string
+    username: string
+    email: string
+}
+```
+
 ### POST `/api/auth/register`
 
-> Create a new user account
+> Create a new user account (No authentication required)
 
 #### Request Body
 
@@ -45,7 +99,7 @@ This file contains a description of each API endpoint used by the Habit Tracker 
 
 ### POST `/api/auth/login`
 
-> Log into an existing user account
+> Log into an existing user account (No authentication required)
 
 #### Request Body
 
@@ -56,26 +110,38 @@ This file contains a description of each API endpoint used by the Habit Tracker 
 
 #### Response
 
-| Status Code | Content                                                                   |
-| ----------- | ------------------------------------------------------------------------- |
-| 422         | { errors: [{ msg: string, param: string }] }                              |
-| 409         | { error: string }                                                         |
-| 200         | { token: string, user: { _id: string, username: string, email: string } } |
+| Status Code | Content                                      |
+| ----------- | -------------------------------------------- |
+| 422         | { errors: [{ msg: string, param: string }] } |
+| 409         | { error: string }                            |
+| 200         | { token: string, user: User }                |
 
-### GET `/api/auth/user` (**Requires Auth**)
+### GET `/api/auth/user`
 
 > Get the current logged in user
 
 #### Response
 
-| Status Code | Content                                                    |
-| ----------- | ---------------------------------------------------------- |
-| 404         | { error: string }                                          |
-| 200         | { user: { _id: string, username: string, email: string } } |
+| Status Code | Content           |
+| ----------- | ----------------- |
+| 404         | { error: string } |
+| 200         | { user: User }    |
 
 ## Task Endpoints
 
-### GET `/api/task` (**Requires Auth**)
+### Types
+
+```typescript
+type Task = {
+    _id: string
+    title: string
+    description: string
+    date: string
+    completed: boolean
+}
+```
+
+### GET `/api/task`
 
 > Get tasks within a date range
 
@@ -89,12 +155,12 @@ This file contains a description of each API endpoint used by the Habit Tracker 
 
 #### Response
 
-| Status Code | Content                                                                                 |
-| ----------- | --------------------------------------------------------------------------------------- |
-| 422         | { errors: [{ msg: string, param: string }] }                                            |
-| 200         | [{ _id: string, title: string, description: string, date: string, completed: boolean }] |
+| Status Code | Content                                      |
+| ----------- | -------------------------------------------- |
+| 422         | { errors: [{ msg: string, param: string }] } |
+| 200         | [ Task ]                                     |
 
-### GET `/api/task/:id` (**Requires Auth**)
+### GET `/api/task/:id`
 
 > Get a single task by its id
 
@@ -106,13 +172,13 @@ This file contains a description of each API endpoint used by the Habit Tracker 
 
 #### Response
 
-| Status Code | Content                                                                               |
-| ----------- | ------------------------------------------------------------------------------------- |
-| 422         | { errors: [{ msg: string, param: string }] }                                          |
-| 404         | {error: string}                                                                       |
-| 200         | { _id: string, title: string, description: string, date: string, completed: boolean } |
+| Status Code | Content                                      |
+| ----------- | -------------------------------------------- |
+| 422         | { errors: [{ msg: string, param: string }] } |
+| 404         | {error: string}                              |
+| 200         | Task                                         |
 
-### POST `/api/task` (**Requires Auth**)
+### POST `/api/task`
 
 > Create a new task
 
@@ -127,12 +193,12 @@ This file contains a description of each API endpoint used by the Habit Tracker 
 
 #### Response
 
-| Status Code | Content                                                                               |
-| ----------- | ------------------------------------------------------------------------------------- |
-| 422         | { errors: [{ msg: string, param: string }] }                                          |
-| 201         | { _id: string, title: string, description: string, date: string, completed: boolean } |
+| Status Code | Content                                      |
+| ----------- | -------------------------------------------- |
+| 422         | { errors: [{ msg: string, param: string }] } |
+| 201         | Task                                         |
 
-### PUT `/api/task/:id` (**Requires Auth**)
+### PUT `/api/task/:id`
 
 > Edit an existing task
 
@@ -153,12 +219,12 @@ This file contains a description of each API endpoint used by the Habit Tracker 
 
 #### Response
 
-| Status Code | Content                                                                               |
-| ----------- | ------------------------------------------------------------------------------------- |
-| 422         | { errors: [{ msg: string, param: string }] }                                          |
-| 200         | { _id: string, title: string, description: string, date: string, completed: boolean } |
+| Status Code | Content                                      |
+| ----------- | -------------------------------------------- |
+| 422         | { errors: [{ msg: string, param: string }] } |
+| 200         | Task                                         |
 
-### PATCH `/api/task/:id` (**Requires Auth**)
+### PATCH `/api/task/:id`
 
 > Toggle task completion
 
@@ -175,7 +241,7 @@ This file contains a description of each API endpoint used by the Habit Tracker 
 | 422         | { errors: [{ msg: string, param: string }] } |
 | 200         | { _id: string, completed: boolean }          |
 
-### DELETE `/api/task/:id` (**Requires Auth**)
+### DELETE `/api/task/:id`
 
 > Delete a task
 
@@ -191,3 +257,93 @@ This file contains a description of each API endpoint used by the Habit Tracker 
 | ----------- | -------------------------------------------- |
 | 422         | { errors: [{ msg: string, param: string }] } |
 | 200         | { _id: string }                              |
+
+## Habit Endpoints
+
+### Types
+
+```typescript
+enum CompletionType {
+    CHECK = 0,
+    TEXT = 1,
+    STARS = 2,
+    NUMBER = 3
+}
+
+enum RepeatType {
+    DAILY = 0,
+    WEEKLY = 1,
+    MONTHLY = 2,
+    CUSTOM = 3
+}
+
+enum Day {
+    SUN = 0,
+    MON = 1,
+    TUE = 2,
+    WED = 3,
+    THU = 4,
+    FRI = 5,
+    SAT = 6
+}
+
+type Completion = {
+    type: CompletionType
+    days: {
+        date: string
+        dateCompare: number
+        completion: boolean | number | string
+    }[]
+}
+
+type Habit = {
+    _id: string
+    title: string
+    description: string
+    start: string
+    end: string
+    startCompare: number
+    endCompare: number
+    completion: Completion
+    repeat: RepeatType
+    days: Day[]
+}
+```
+
+### GET `/api/habit`
+
+> Get habits within a date range
+
+#### Request Query
+
+| Property | Type   | Requirements                   |
+| -------- | ------ | ------------------------------ |
+| start    | string | Matches the pattern YYYY-mm-dd |
+| end      | string | Matches the pattern YYYY-mm-dd |
+|          |        | Cannot be before start         |
+
+#### Response
+
+| Status Code | Content                                      |
+| ----------- | -------------------------------------------- |
+| 422         | { errors: [{ msg: string, param: string }] } |
+| 200         | [ Habit ]                                    |
+
+### GET `/api/habit/:id`
+
+> Get a single habit by id
+
+#### Request Params
+
+| Property | Type   | Requirements         |
+| -------- | ------ | -------------------- |
+| id       | string | Valid Mongo ObjectID |
+
+#### Response
+
+| Status Code | Content                                      |
+| ----------- | -------------------------------------------- |
+| 422         | { errors: [{ msg: string, param: string }] } |
+| 404         | {error: string}                              |
+| 200         | Habit                                        |
+

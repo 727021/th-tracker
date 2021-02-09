@@ -11,7 +11,7 @@ export interface ITask extends Document {
     completed: boolean
 }
 
-export const taskSchema = new Schema({
+export const taskSchema = new Schema<ITask>({
     owner: {
         type: Schema.Types.ObjectId,
         ref: 'User',
@@ -40,9 +40,8 @@ export const taskSchema = new Schema({
     }
 })
 
-taskSchema.pre('save', function (next) {
-    const _t = this as ITask
-    _t.dateCompare = dateToNumber(_t.date)
+taskSchema.pre<ITask>('save', function (next) {
+    this.dateCompare = dateToNumber(this.date)
     next()
 })
 
