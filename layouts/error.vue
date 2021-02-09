@@ -1,7 +1,9 @@
 <template>
-    <v-container>
-        <h1 class="text-center">Error</h1>
+    <v-container class="text-center">
+        <h1>Error</h1>
         <p>{{ error.message }}</p>
+        <br />
+        <v-btn to="/home">Go Home</v-btn>
     </v-container>
 </template>
 

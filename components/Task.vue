@@ -1,17 +1,24 @@
 <template>
-    <v-list-item :key="index">
+    <v-list-item>
         <v-list-item-content
             class="pointer noselect"
             @dblclick.prevent="editTask(task._id)"
         >
             <v-list-item-title
                 :class="{
-                    'text-decoration-line-through': task.completed
+                    'text-decoration-line-through text--disabled':
+                        task.completed
                 }"
             >
                 {{ task.title }}
             </v-list-item-title>
-            <v-list-item-subtitle v-if="task.description">
+            <v-list-item-subtitle
+                v-if="task.description"
+                :class="{
+                    'text-decoration-line-through text--disabled':
+                        task.completed
+                }"
+            >
                 {{ task.description }}
             </v-list-item-subtitle>
         </v-list-item-content>
@@ -21,9 +28,10 @@
                     <v-btn
                         small
                         icon
-                        @click="deleteTask(task._id)"
+                        @click="deleteTask"
                         v-bind="attrs"
                         v-on="on"
+                        :disabled="loading"
                     >
                         <v-icon small>mdi-delete</v-icon>
                     </v-btn>
@@ -35,9 +43,10 @@
                     <v-btn
                         small
                         icon
-                        @click="toggleCompleted(task._id)"
+                        @click="toggleCompleted"
                         v-bind="attrs"
                         v-on="on"
+                        :disabled="loading"
                     >
                         <v-icon small>
                             {{
@@ -62,25 +71,46 @@ import 'reflect-metadata'
 import { Vue, Component, Prop } from 'vue-property-decorator'
 
 import { ITask } from '~/api/models/task'
+import { COMPLETE_TASK, DELETE_TASK } from '~/@types/mutation-types'
 
-type APITask =
-    | Pick<ITask, 'title' | 'description' | 'date' | 'completed'>
-    | { _id: string }
+type APITask = Pick<ITask, 'title' | 'description' | 'date' | 'completed'> & {
+    _id: string
+}
+type CompletedTask = Pick<APITask, '_id' | 'completed'>
+type DeletedTask = Pick<APITask, '_id'>
 
 @Component
 export default class Task extends Vue {
     @Prop({ required: true }) readonly task!: APITask
 
-    editTask(id: string) {
-        this.$router.push(`/task/${id}`)
+    loading: boolean = false
+
+    editTask() {
+        this.$router.push(`/task/${this.task._id}`)
     }
 
-    deleteTask(id: string) {
-        //
+    async toggleCompleted() {
+        try {
+            this.loading = true
+            const task: CompletedTask = await this.$axios.$patch<CompletedTask>(
+                `/api/task/${this.task._id}`
+            )
+            this.$store.commit(COMPLETE_TASK, task)
+        } finally {
+            this.loading = false
+        }
     }
 
-    toggleCompleted(id: string) {
-        //
+    async deleteTask() {
+        try {
+            this.loading = true
+            const task: DeletedTask = await this.$axios.$delete<DeletedTask>(
+                `/api/task/${this.task._id}`
+            )
+            this.$store.commit(DELETE_TASK, task)
+        } finally {
+            this.loading = false
+        }
     }
 }
 </script>

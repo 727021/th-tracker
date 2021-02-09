@@ -55,9 +55,13 @@
 import { StatusCodes } from 'http-status-codes'
 import 'reflect-metadata'
 import { Vue, Component, Prop } from 'vue-property-decorator'
-import { ITask } from '~/api/models/task'
 
-type Editing = Pick<ITask, 'date' | 'title' | 'description'>
+import { ITask } from '~/api/models/task'
+import { CREATE_TASK, EDIT_TASK } from '~/@types/mutation-types'
+
+type APITask = Pick<ITask, 'date' | 'title' | 'description' | 'completed'> & {
+    _id: string
+}
 
 interface input {
     value: string
@@ -87,18 +91,21 @@ export default class TaskEditor extends Vue {
         this.title.error = ''
         this.description.error = ''
         try {
-            if (!this.taskId)
-                await this.$axios.$post('/api/task', {
+            if (!this.taskId) {
+                const task = await this.$axios.$post<APITask>('/api/task', {
                     date: this.date.value,
                     title: this.title.value,
                     description: this.description.value
                 })
-            else
-                await this.$axios.$put(`/api/task/${this.taskId}`, {
+                this.$store.commit(CREATE_TASK, task)
+            } else {
+                const task = await this.$axios.$put<APITask>(`/api/task/${this.taskId}`, {
                     date: this.date.value,
                     title: this.title.value,
                     description: this.description.value
                 })
+                this.$store.commit(EDIT_TASK, task)
+            }
 
             this.$router.push('/')
         } catch (err) {
@@ -130,7 +137,7 @@ export default class TaskEditor extends Vue {
                 date,
                 title,
                 description
-            }: Editing = await this.$axios.$get<Editing>(
+            }: APITask = await this.$axios.$get<APITask>(
                 `/api/task/${this.taskId}`
             )
 

@@ -185,7 +185,7 @@ export default class Auth extends Vue {
 }
 </script>
 
-<style>
+<style scoped>
 .slide-down-enter,
 .slide-down-leave-to {
     transform: scaleX(0);

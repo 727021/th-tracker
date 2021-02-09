@@ -2,11 +2,18 @@
     touch-action: pan-x pan-y
     height: 100%
 
-.noselect
+%noselect
     user-select: none
     -ms-user-select: none
     -moz-user-select: none
     -webkit-user-select: none
+
+*
+    @extend %noselect
+
+.noselect
+    @extend %noselect
+    cursor: default
 
 .pointer
     cursor: pointer

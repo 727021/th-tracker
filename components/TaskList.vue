@@ -6,17 +6,20 @@
             <v-spacer></v-spacer>
             <v-tooltip left>
                 <template #activator="{ on, attrs }">
-                    <v-btn
-                        dark
-                        fab
-                        small
-                        color="success"
-                        v-bind="attrs"
-                        v-on="on"
-                        to="/task"
-                    >
-                        <v-icon large>mdi-plus</v-icon>
-                    </v-btn>
+                    <transition name="grow">
+                        <v-btn
+                            dark
+                            fab
+                            small
+                            color="success"
+                            v-bind="attrs"
+                            v-on="on"
+                            to="/task"
+                            v-if="showPlus"
+                        >
+                            <v-icon large>mdi-plus</v-icon>
+                        </v-btn>
+                    </transition>
                 </template>
                 <span>New Task</span>
             </v-tooltip>
@@ -24,9 +27,9 @@
 
         <v-card-subtitle>(Double click to edit)</v-card-subtitle>
 
-        <v-list v-if="$store.state.tasks.length > 0" three-line>
-            <template v-for="(item, index) in $store.state.tasks">
-                <v-divider v-if="index > 0" :key="index"></v-divider>
+        <v-list v-if="getTasks.length > 0" three-line>
+            <template v-for="(item, index) in getTasks">
+                <v-divider v-if="index > 0" :key="`d${index}`"></v-divider>
                 <Task :task="item" :key="index" />
             </template>
         </v-list>
@@ -47,7 +50,29 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'
+import { Getter } from 'vuex-class'
+
+import { GET_TASKS } from '~/@types/getter-types'
+import { ITask } from '~/api/models/task'
+
+type APITask = Pick<ITask, 'title' | 'description' | 'date' | 'completed'> & {
+    _id: string
+}
 
 @Component
-export default class TaskList extends Vue {}
+export default class TaskList extends Vue {
+    @Getter(GET_TASKS) getTasks!: APITask[]
+
+    get showPlus(): boolean {
+        const [year, month, day] = new Date()
+            .toISOString()
+            .substring(0, 10)
+            .split('-')
+            .map(Number)
+        const [y, m, d] = this.$store.state.selectedDay.split('-').map(Number)
+        console.log([year, month, day])
+        console.log([y, m, d])
+        return y >= year && m >= month && d >= day
+    }
+}
 </script>
