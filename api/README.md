@@ -39,6 +39,22 @@
     - [GET `/api/habit/:id`](#get-apihabitid)
       - [Request Params](#request-params-4)
       - [Response](#response-11)
+    - [POST `/api/habit`](#post-apihabit)
+      - [Request Body](#request-body-4)
+      - [Response](#response-12)
+    - [POST `/api/habit/:id`](#post-apihabitid)
+      - [Request Params](#request-params-5)
+      - [Response](#response-13)
+    - [PUT `/api/habit/:id`](#put-apihabitid)
+      - [Request Params](#request-params-6)
+      - [Request Body](#request-body-5)
+      - [Response](#response-14)
+    - [PATCH `/api/habit/:id`](#patch-apihabitid)
+      - [Request Params](#request-params-7)
+      - [Request Body](#request-body-6)
+    - [DELETE `/api/habit/:id`](#delete-apihabitid)
+      - [Request Params](#request-params-8)
+      - [Response](#response-15)
 
 # Task/Habit Tracker API Reference
 
@@ -347,3 +363,109 @@ type Habit = {
 | 404         | {error: string}                              |
 | 200         | Habit                                        |
 
+### POST `/api/habit`
+
+> Create a new habit
+
+#### Request Body
+
+| Property    | Type     | Requirements                         |
+| ----------- | -------- | ------------------------------------ |
+| title       | string   | Between 3 and 64 characters long     |
+|             |          | Contain at least 1 letter            |
+| description | string   | No longer than 128 characters        |
+| start       | string   | Matches the pattern YYYY-mm-dd       |
+| completion  | number   | Valid CompletionType                 |
+| repeat      | number   | Valid RepeatType                     |
+| days        | number[] | Required only with RepeatType.CUSTOM |
+|             |          | Array of valid Day                   |
+
+#### Response
+
+| Status Code | Content                                      |
+| ----------- | -------------------------------------------- |
+| 422         | { errors: [{ msg: string, param: string }] } |
+| 201         | Habit                                        |
+
+### POST `/api/habit/:id`
+
+> End an existing habit
+
+#### Request Params
+
+| Property | Type   | Requirements         |
+| -------- | ------ | -------------------- |
+| id       | string | Valid Mongo ObjectID |
+
+#### Response
+
+| Status Code | Content                                          |
+| ----------- | ------------------------------------------------ |
+| 422         | { errors: [{ msg: string, param: string }] }     |
+| 200         | { _id: string, end: string, endCompare: number } |
+
+### PUT `/api/habit/:id`
+
+> Edit an existing habit
+
+#### Request Params
+
+| Property | Type   | Requirements         |
+| -------- | ------ | -------------------- |
+| id       | string | Valid Mongo ObjectID |
+
+#### Request Body
+
+| Property    | Type     | Requirements                         |
+| ----------- | -------- | ------------------------------------ |
+| title       | string   | Between 3 and 64 characters long     |
+|             |          | Contain at least 1 letter            |
+| description | string   | No longer than 128 characters        |
+| repeat      | number   | Valid RepeatType                     |
+| days        | number[] | Required only with RepeatType.CUSTOM |
+|             |          | Array of valid Day                   |
+
+#### Response
+
+| Status Code | Content                                      |
+| ----------- | -------------------------------------------- |
+| 422         | { errors: [{ msg: string, param: string }] } |
+| 200         | Habit                                        |
+
+### PATCH `/api/habit/:id`
+
+> Complete a habit for a given day
+
+#### Request Params
+
+| Property | Type   | Requirements         |
+| -------- | ------ | -------------------- |
+| id       | string | Valid Mongo ObjectID |
+
+#### Request Body
+
+| Property   | Type    | Requirements                                            |
+| ---------- | ------- | ------------------------------------------------------- |
+| date       | string  | Matches the pattern YYYY-mm-dd                          |
+| completion | string  | Habit has CompletionType.TEXT                           |
+|            |         | Not empty                                               |
+|            |         | Contain at least one letter                             |
+| completion | boolean | Habit has CompletionType.CHECK                          |
+| completion | number  | Habit has CompletionType.STARS or CompletionType.NUMBER |
+
+### DELETE `/api/habit/:id`
+
+> Delete a habit
+
+#### Request Params
+
+| Property | Type   | Requirements         |
+| -------- | ------ | -------------------- |
+| id       | string | Valid Mongo ObjectID |
+
+#### Response
+
+| Status Code | Content                                      |
+| ----------- | -------------------------------------------- |
+| 422         | { errors: [{ msg: string, param: string }] } |
+| 200         | { _id: string }                              |
