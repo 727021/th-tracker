@@ -192,7 +192,7 @@ export const completeHabit = async (
 
     const id: string = req.params.id
     const date: string = req.body.date
-    const completion: string | number | boolean = req.body.completion
+    const completion: string | number | boolean | undefined = req.body.completion
 
     try {
         const habit = await Habit.findOne({ owner: req.user?._id, _id: id })

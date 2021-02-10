@@ -114,7 +114,8 @@ router
                             'Text entry must contain at least one letter'
                         ),
                     body('completion').isNumeric().toFloat(),
-                    body('completion').isBoolean()
+                    body('completion').isBoolean(),
+                    body('completion').optional()
                 ],
                 'Invalid completion value'
             )

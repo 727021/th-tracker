@@ -89,6 +89,7 @@ export const habitSchema = new Schema<IHabit>({
         },
         days: [
             {
+                _id: false,
                 date: {
                     type: String,
                     required: true
@@ -163,7 +164,15 @@ habitSchema.methods.markComplete = async function (
             completion
         }
 
-        this.completion.days.push(d)
+        let found = false
+        this.completion.days = this.completion.days.map(day => {
+            if (day.dateCompare === d.dateCompare) {
+                found = true
+                return d
+            }
+            return day
+        })
+        if (!found) this.completion.days.push(d)
     }
 
     return this.save()
