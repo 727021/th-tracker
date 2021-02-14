@@ -1,17 +1,10 @@
-import { Document, Schema, model, ObjectId } from 'mongoose'
+import { Schema, model } from 'mongoose'
 
 import dateToNumber from '../util/dateToNumber'
 
-export interface ITask extends Document {
-    owner: ObjectId
-    title: string
-    description: string
-    date: string
-    dateCompare: number
-    completed: boolean
-}
+import { ITaskDocument } from '../../@types/task'
 
-export const taskSchema = new Schema<ITask>({
+export const taskSchema = new Schema<ITaskDocument>({
     owner: {
         type: Schema.Types.ObjectId,
         ref: 'User',
@@ -40,9 +33,9 @@ export const taskSchema = new Schema<ITask>({
     }
 })
 
-taskSchema.pre<ITask>('save', function (next) {
+taskSchema.pre<ITaskDocument>('save', function (next) {
     this.dateCompare = dateToNumber(this.date)
     next()
 })
 
-export default model<ITask>('Task', taskSchema)
+export default model<ITaskDocument>('Task', taskSchema)

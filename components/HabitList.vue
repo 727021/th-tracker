@@ -13,7 +13,7 @@
                         color="success"
                         v-bind="attrs"
                         v-on="on"
-                        @click="newHabit"
+                        to="/habit"
                     >
                         <v-icon large>mdi-plus</v-icon>
                     </v-btn>
@@ -46,13 +46,9 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'
-import { Mutation } from 'vuex-class'
-import { NEW_HABIT } from '~/@types/mutation-types'
 
 @Component
 export default class HabitList extends Vue {
     loading: boolean = true
-
-    @Mutation(NEW_HABIT) newHabit!: any
 }
 </script>

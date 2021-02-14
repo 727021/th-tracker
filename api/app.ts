@@ -10,7 +10,8 @@ import cors, { CorsOptions } from 'cors'
 
 import routes from './routes'
 
-import User, { IUser } from './models/user'
+import User from './models/user'
+import { APIUser } from '../@types/user'
 
 config()
 
@@ -34,7 +35,7 @@ app.use(morgan('dev'))
                     if (err && err.name === 'TokenExpiredError') next()
                     else if (err) next(err)
                     else
-                        User.findById((decoded as IUser)._id)
+                        User.findById((decoded as APIUser)._id)
                             .then(user => {
                                 if (user) {
                                     req.user = user

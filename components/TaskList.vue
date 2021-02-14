@@ -53,26 +53,18 @@ import { Vue, Component } from 'vue-property-decorator'
 import { Getter } from 'vuex-class'
 
 import { GET_TASKS } from '~/@types/getter-types'
-import { ITask } from '~/api/models/task'
-
-type APITask = Pick<ITask, 'title' | 'description' | 'date' | 'completed'> & {
-    _id: string
-}
+import { APITask } from '~/@types/task'
+import dateToNumber from '~/api/util/dateToNumber'
 
 @Component
 export default class TaskList extends Vue {
     @Getter(GET_TASKS) getTasks!: APITask[]
 
     get showPlus(): boolean {
-        const [year, month, day] = new Date()
-            .toISOString()
-            .substring(0, 10)
-            .split('-')
-            .map(Number)
-        const [y, m, d] = this.$store.state.selectedDay.split('-').map(Number)
-        console.log([year, month, day])
-        console.log([y, m, d])
-        return y >= year && m >= month && d >= day
+        return (
+            dateToNumber(this.$store.state.selectedDay) >=
+            dateToNumber(new Date().toISOString().substring(0, 10))
+        )
     }
 }
 </script>

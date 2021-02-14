@@ -4,7 +4,8 @@ import { StatusCodes } from 'http-status-codes'
 import validationErrors from '../util/validationErrors'
 import dateToNumber from '../util/dateToNumber'
 
-import Habit, { CompletionType, RepeatType, Day } from '../models/habit'
+import Habit from '../models/habit'
+import { Completion, Repeat, Day } from '../../@types/habit'
 
 export const getHabits = async (
     req: Request,
@@ -70,8 +71,8 @@ export const createHabit = async (
     const title: string = req.body.title
     const description: string = req.body.description
     const start: string = req.body.start
-    const completion: CompletionType = req.body.completion
-    const repeat: RepeatType = req.body.repeat
+    const completion: Completion = req.body.completion
+    const repeat: Repeat = req.body.repeat
     const days: Day[] | undefined = req.body.days
 
     try {
@@ -148,7 +149,7 @@ export const editHabit = async (
     const id: string = req.params.id
     const title: string = req.body.title
     const description: string = req.body.description
-    const repeat: RepeatType = req.body.repeat
+    const repeat: Repeat = req.body.repeat
     const days: Day[] = req.body.days || []
 
     try {
@@ -192,7 +193,8 @@ export const completeHabit = async (
 
     const id: string = req.params.id
     const date: string = req.body.date
-    const completion: string | number | boolean | undefined = req.body.completion
+    const completion: string | number | boolean | undefined =
+        req.body.completion
 
     try {
         const habit = await Habit.findOne({ owner: req.user?._id, _id: id })

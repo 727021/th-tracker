@@ -1,58 +1,9 @@
 import { Document, Schema, model, ObjectId } from 'mongoose'
 
 import dateToNumber from '../util/dateToNumber'
+import { IHabitDocument, Completion } from '../../@types/habit'
 
-export const enum CompletionType {
-    CHECK,
-    TEXT,
-    STARS,
-    NUMBER
-}
-
-export const enum RepeatType {
-    DAILY,
-    WEEKLY,
-    MONTHLY,
-    CUSTOM
-}
-
-export const enum Day {
-    SUN,
-    MON,
-    TUE,
-    WED,
-    THU,
-    FRI,
-    SAT
-}
-
-export type Completion = {
-    type: CompletionType
-    days: {
-        date: string
-        dateCompare: number
-        completion: boolean | number | string
-    }[]
-}
-
-export interface IHabit extends Document {
-    owner: ObjectId
-    title: string
-    description: string
-    start: string
-    end: string
-    startCompare: number
-    endCompare: number
-    completion: Completion
-    repeat: RepeatType
-    days: Day[]
-    markComplete: (
-        date: string,
-        completion?: boolean | number | string
-    ) => Promise<IHabit>
-}
-
-export const habitSchema = new Schema<IHabit>({
+export const habitSchema = new Schema<IHabitDocument>({
     owner: {
         type: Schema.Types.ObjectId,
         required: true,
@@ -115,7 +66,7 @@ export const habitSchema = new Schema<IHabit>({
     }
 })
 
-habitSchema.pre<IHabit>('save', function (next) {
+habitSchema.pre<IHabitDocument>('save', function (next) {
     this.startCompare = dateToNumber(this.start)
     if (this.end) this.endCompare = dateToNumber(this.end)
     next()
@@ -129,7 +80,7 @@ habitSchema.pre<IHabit>('save', function (next) {
 habitSchema.methods.markComplete = async function (
     date: string,
     completion?: boolean | number | string
-): Promise<IHabit> {
+): Promise<IHabitDocument> {
     const dateCompare = dateToNumber(date)
 
     if (completion === undefined) {
@@ -140,20 +91,20 @@ habitSchema.methods.markComplete = async function (
     } else {
         // Do type conversion and throw errors if necessary
         switch (this.completion.type) {
-            case CompletionType.CHECK:
+            case Completion.CHECK:
                 completion = !!completion
                 break
-            case CompletionType.NUMBER:
+            case Completion.NUMBER:
                 completion = +completion
                 if (isNaN(completion) || completion < 0)
                     throw new Error('Completion value must be a number > 0')
                 break
-            case CompletionType.STARS:
+            case Completion.STARS:
                 completion = +completion
                 if (isNaN(completion) || completion < 0 || completion > 5)
                     throw new Error('Completion value must be a number 0-5')
                 break
-            case CompletionType.TEXT:
+            case Completion.TEXT:
                 completion = '' + completion
                 break
         }
@@ -178,4 +129,4 @@ habitSchema.methods.markComplete = async function (
     return this.save()
 }
 
-export default model<IHabit>('Habit', habitSchema)
+export default model<IHabitDocument>('Habit', habitSchema)

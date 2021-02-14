@@ -80,17 +80,22 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'
 import { StatusCodes } from 'http-status-codes'
+import { APIUser } from '~/@types/user'
 
-interface input {
+type input = {
     value: string
     error: string
 }
 
-interface hideable extends input {
+type hideable = {
     show: boolean
-}
+} & input
 
-@Component({ head: { title: 'Log In or Sign Up' }, auth: 'guest', transition: 'slide-left' })
+@Component({
+    head: { title: 'Log In or Sign Up' },
+    auth: 'guest',
+    transition: 'slide-left'
+})
 export default class Auth extends Vue {
     username: input = {
         value: '',
@@ -125,7 +130,7 @@ export default class Auth extends Vue {
     async onSubmit() {
         if (this.register) {
             try {
-                const { username } = await this.$axios.$post(
+                const { username } = await this.$axios.$post<APIUser>(
                     '/api/auth/register',
                     {
                         username: this.username.value,
@@ -189,12 +194,12 @@ export default class Auth extends Vue {
 .slide-down-enter,
 .slide-down-leave-to {
     transform: scaleX(0);
-    transition: all .5s ease;
+    transition: all 0.5s ease;
 }
 
 .slide-down-leave,
 .slide-down-enter-to {
     transform: scaleX(1);
-    transition: all .5s ease;
+    transition: all 0.5s ease;
 }
 </style>

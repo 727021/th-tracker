@@ -70,14 +70,8 @@
 import 'reflect-metadata'
 import { Vue, Component, Prop } from 'vue-property-decorator'
 
-import { ITask } from '~/api/models/task'
+import type { APITask, CompletedTask, DeletedTask } from '~/@types/task'
 import { COMPLETE_TASK, DELETE_TASK } from '~/@types/mutation-types'
-
-type APITask = Pick<ITask, 'title' | 'description' | 'date' | 'completed'> & {
-    _id: string
-}
-type CompletedTask = Pick<APITask, '_id' | 'completed'>
-type DeletedTask = Pick<APITask, '_id'>
 
 @Component
 export default class Task extends Vue {
