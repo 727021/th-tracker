@@ -169,7 +169,7 @@ export default class Auth extends Vue {
             }
         } else {
             try {
-                await this.$auth.loginWith('local', {
+                await this.$auth.loginWith('cookie', {
                     data: {
                         username: this.username.value,
                         password: this.password.value

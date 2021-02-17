@@ -119,6 +119,13 @@ export const mutations: MutationTree<RootState> = {
 }
 
 export const actions: ActionTree<RootState, RootState> = {
+    async nuxtServerInit() {
+        try {
+            this.$auth.setUser(
+                await this.$axios.$get(`${process.env.API_ROOT}/auth/user`)
+            )
+        } catch (err) {}
+    },
     [SELECT_DAY](
         { commit, dispatch, state: { selectedDay, tasks, habits } },
         day: string

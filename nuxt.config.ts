@@ -77,10 +77,10 @@ const config: NuxtConfig = {
     auth: {
         watchLoggedIn: true,
         strategies: {
-            local: {
-                token: {
-                    property: 'token'
-                },
+            cookie: {
+                // token: {
+                //     property: 'token'
+                // },
                 user: {
                     property: 'user'
                 },
@@ -90,7 +90,11 @@ const config: NuxtConfig = {
                         method: 'post',
                         propertyName: false
                     },
-                    logout: false,
+                    logout: {
+                        url: '/api/auth/logout',
+                        method: 'post',
+                        propertyName: false
+                    },
                     user: {
                         url: '/api/auth/user',
                         method: 'get',
