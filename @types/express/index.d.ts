@@ -1,10 +1,11 @@
-import { IUser } from '@/api/models/user'
+import { IUserDocument } from "../user";
 
 declare global {
     namespace Express {
         interface Request {
-            user?: IUser | null
+            user?: IUserDocument | null
             authenticated?: boolean
+            refresh_token?: string
         }
     }
 }

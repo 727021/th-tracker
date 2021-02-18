@@ -1,12 +1,15 @@
 import { Request, Response, NextFunction } from 'express'
 import { hash, compare } from 'bcrypt'
 import { StatusCodes } from 'http-status-codes'
-import { sign, decode } from 'jsonwebtoken'
+import { decode, verify, TokenExpiredError } from 'jsonwebtoken'
 
-import { SALT_ROUNDS, JWT_EXPIRES_IN } from '../util/constants'
+import { SALT_ROUNDS } from '../util/constants'
 import validationErrors from '../util/validationErrors'
 
 import { User } from '../models'
+import { createTokens } from '../util/tokens'
+import HttpException from '../exceptions/HttpException'
+import { APIUser } from '~/@types/user'
 
 export const postRegister = async (
     req: Request,
@@ -46,21 +49,11 @@ export const postLogin = async (
                 .status(StatusCodes.CONFLICT)
                 .send({ error: 'Invalid Username/Password' })
 
-        const token = sign(
-            { _id: user._id },
-            process.env.JWT_SECRET as string,
-            {
-                expiresIn: JWT_EXPIRES_IN
-            }
-        )
+        const { access_token, refresh_token } = createTokens(user)
 
         res.status(StatusCodes.OK).send({
-            token,
-            user: {
-                _id: user._id,
-                username: user.username,
-                email: user.email
-            }
+            access_token,
+            refresh_token
         })
     } catch (err) {
         next(err)
@@ -73,23 +66,59 @@ export const getUser = async (
     next: NextFunction
 ) => {
     try {
-        const { _id } = decode(req.token as string) as { _id: string }
-
-        const user = await User.findById(_id)
-
-        if (!user)
+        if (!req.user)
             return res
                 .status(StatusCodes.NOT_FOUND)
                 .send({ error: 'User Not Found' })
 
         res.status(StatusCodes.OK).send({
             user: {
-                _id: user._id,
-                username: user.username,
-                email: user.email
+                _id: req.user._id,
+                username: req.user.username,
+                email: req.user.email
             }
         })
     } catch (err) {
+        next(err)
+    }
+}
+
+export const postRefresh = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    if (!req.refresh_token)
+        return next(
+            new HttpException('Not Logged In', StatusCodes.UNAUTHORIZED)
+        )
+
+    try {
+        const { _id } = decode(req.refresh_token) as Pick<APIUser, '_id'>
+
+        const user = await User.findById(_id)
+
+        if (!user)
+            return next(
+                new HttpException('Not Logged In', StatusCodes.UNAUTHORIZED)
+            )
+
+        verify(
+            req.refresh_token,
+            process.env.JWT_REFRESH_SECRET + user.password
+        )
+
+        const { access_token, refresh_token } = createTokens(user)
+
+        res.status(StatusCodes.OK).send({
+            access_token,
+            refresh_token
+        })
+    } catch (err) {
+        if (err instanceof TokenExpiredError)
+            return next(
+                new HttpException('Not Logged In', StatusCodes.UNAUTHORIZED)
+            )
         next(err)
     }
 }

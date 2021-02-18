@@ -22,6 +22,8 @@ import { Day, Repeat } from '~/@types/habit'
 import type { APIHabit } from '~/@types/habit'
 import { GET_HABITS, GET_MONTH, GET_TASKS } from '~/@types/getter-types'
 import dateToNumber from '~/api/util/dateToNumber'
+import { Context } from '@nuxt/types'
+import { RefreshScheme, RefreshSchemeOptions } from '@nuxtjs/auth-next'
 
 const initialState = (): RootState => ({
     selectedDay: new Date().toISOString().substring(0, 10),
@@ -119,6 +121,34 @@ export const mutations: MutationTree<RootState> = {
 }
 
 export const actions: ActionTree<RootState, RootState> = {
+    async nuxtServerInit({ commit }, { req }: Context) {
+        if (req.headers.cookie) {
+            const cookieObj: { [key: string]: string } = {}
+            req.headers.cookie.split('; ').forEach(c => {
+                try {
+                    const [k, v] = c.split('=')
+                    cookieObj[k.trim()] = unescape(v).trim()
+                } catch (e) {}
+            })
+
+            console.log(cookieObj)
+
+            const strat = this.$auth.getStrategy() as RefreshScheme
+
+            const access_token = cookieObj['auth._token.local']
+            const refresh_token = cookieObj['auth._refresh_token.local']
+
+            if (Boolean(access_token) && Boolean(refresh_token)) {
+                strat.token.set(access_token)
+                strat.refreshToken.set(refresh_token)
+            }
+
+            await this.$auth.fetchUser()
+            if (this.$auth.user) this.$auth.setUser(this.$auth.user)
+
+            console.log('USER FETCHED')
+        }
+    },
     [SELECT_DAY](
         { commit, dispatch, state: { selectedDay, tasks, habits } },
         day: string

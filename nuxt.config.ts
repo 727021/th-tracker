@@ -56,7 +56,8 @@ const config: NuxtConfig = {
         // https://go.nuxtjs.dev/typescript
         '@nuxt/typescript-build',
         // https://go.nuxtjs.dev/vuetify
-        '@nuxtjs/vuetify'
+        '@nuxtjs/vuetify',
+        'nuxt-build-optimisations'
     ],
 
     // Modules (https://go.nuxtjs.dev/config-modules)
@@ -69,17 +70,28 @@ const config: NuxtConfig = {
         '@nuxtjs/device'
     ],
 
+    buildOptimisations: {
+        profile: 'risky'
+    },
+
     // Axios module configuration (https://go.nuxtjs.dev/config-axios)
     axios: {
         baseURL: ''
     },
 
     auth: {
+        localStorage: undefined,
         watchLoggedIn: true,
         strategies: {
             local: {
+                scheme: 'refresh',
                 token: {
-                    property: 'token'
+                    property: 'access_token',
+                    maxAge: 60
+                },
+                refreshToken: {
+                    property: 'refresh_token',
+                    maxAge: 60 * 60 * 24 * 7
                 },
                 user: {
                     property: 'user'
@@ -87,14 +99,16 @@ const config: NuxtConfig = {
                 endpoints: {
                     login: {
                         url: '/api/auth/login',
-                        method: 'post',
-                        propertyName: false
+                        method: 'post'
                     },
                     logout: false,
                     user: {
                         url: '/api/auth/user',
-                        method: 'get',
-                        propertyName: false
+                        method: 'get'
+                    },
+                    refresh: {
+                        url: '/api/auth/refresh',
+                        method: 'post'
                     }
                 }
             }
