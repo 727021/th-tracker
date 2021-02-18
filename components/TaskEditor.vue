@@ -80,7 +80,7 @@ export default class TaskEditor extends Vue {
         value: '',
         error: ''
     }
-    taskId: string | undefined = this.id
+    taskId: string | false = this.id || false
 
     async save() {
         this.date.error = ''

@@ -24,6 +24,8 @@ import { GET_HABITS, GET_MONTH, GET_TASKS } from '~/@types/getter-types'
 import dateToNumber from '~/api/util/dateToNumber'
 import { Context } from '@nuxt/types'
 import { RefreshScheme, RefreshSchemeOptions } from '@nuxtjs/auth-next'
+import { APIUser } from '~/@types/user'
+import { StatusCodes } from 'http-status-codes'
 
 const initialState = (): RootState => ({
     selectedDay: new Date().toISOString().substring(0, 10),
@@ -121,7 +123,7 @@ export const mutations: MutationTree<RootState> = {
 }
 
 export const actions: ActionTree<RootState, RootState> = {
-    async nuxtServerInit({ commit }, { req }: Context) {
+    async nuxtServerInit({ dispatch }, { req }: Context) {
         if (req.headers.cookie) {
             const cookieObj: { [key: string]: string } = {}
             req.headers.cookie.split('; ').forEach(c => {
@@ -131,8 +133,6 @@ export const actions: ActionTree<RootState, RootState> = {
                 } catch (e) {}
             })
 
-            console.log(cookieObj)
-
             const strat = this.$auth.getStrategy() as RefreshScheme
 
             const access_token = cookieObj['auth._token.local']
@@ -141,12 +141,60 @@ export const actions: ActionTree<RootState, RootState> = {
             if (Boolean(access_token) && Boolean(refresh_token)) {
                 strat.token.set(access_token)
                 strat.refreshToken.set(refresh_token)
+                await dispatch('fetchUser', { access_token, refresh_token })
             }
+        }
+    },
+    async fetchUser(
+        _,
+        {
+            access_token,
+            refresh_token
+        }: { access_token: string; refresh_token: string }
+    ) {
+        try {
+            const { user } = await this.$axios.$get(
+                `${process.env.API_ROOT}/auth/user`,
+                {
+                    headers: {
+                        Authorization: access_token
+                    }
+                }
+            )
 
-            await this.$auth.fetchUser()
-            if (this.$auth.user) this.$auth.setUser(this.$auth.user)
+            this.$auth.setUser(user)
+        } catch (err) {
+            if (err.response.data.status === StatusCodes.UNAUTHORIZED) {
+                const tokens = await this.$axios.$post(
+                    `${process.env.API_ROOT}/auth/refresh`,
+                    { refresh_token },
+                    {
+                        headers: {
+                            Authorization: access_token
+                        }
+                    }
+                )
+                const strat = this.$auth.getStrategy() as RefreshScheme
+                if (
+                    Boolean(tokens.access_token) &&
+                    Boolean(tokens.refresh_token)
+                ) {
+                    strat.token.set(tokens.access_token)
+                    strat.refreshToken.set(tokens.refresh_token)
+                    try {
+                        const { user } = await this.$axios.$get(
+                            `${process.env.API_ROOT}/auth/user`,
+                            {
+                                headers: {
+                                    Authorization: tokens.access_token
+                                }
+                            }
+                        )
 
-            console.log('USER FETCHED')
+                        this.$auth.setUser(user)
+                    } catch (err) {}
+                }
+            }
         }
     },
     [SELECT_DAY](

@@ -81,6 +81,11 @@ const config: NuxtConfig = {
 
     auth: {
         localStorage: undefined,
+        cookie: {
+            options: {
+                maxAge: 60 * 60 * 24 * 14
+            }
+        },
         watchLoggedIn: true,
         strategies: {
             local: {
@@ -101,11 +106,7 @@ const config: NuxtConfig = {
                         url: '/api/auth/login',
                         method: 'post'
                     },
-                    logout: {
-                        url: '/api/auth/logout',
-                        method: 'post',
-                        propertyName: false
-                    },
+                    logout: false,
                     user: {
                         url: '/api/auth/user',
                         method: 'get'
