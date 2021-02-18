@@ -176,13 +176,14 @@ export default class Auth extends Vue {
                     }
                 })
             } catch (err) {
-                if (err.response.status === StatusCodes.CONFLICT) {
+                const status = err.response?.status || err.statusCode
+                if (status === StatusCodes.CONFLICT) {
                     this.username.error = err.response.data.error
                     this.password.error = ' '
                 } else
                     this.$nuxt.error({
                         message: err.message ?? err.response?.data?.error,
-                        statusCode: err.response?.status
+                        statusCode: status
                     })
             }
         }
