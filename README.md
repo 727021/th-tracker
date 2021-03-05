@@ -12,7 +12,9 @@ Create a *.env* file with the following keys:
 
 ```
 MONGODB_URL='<Your MongoDB connection URI>'
-JWT_SECRET='<Your JWT secret>'
+JWT_SECRET='<Your auth token secret>'
+JWT_REFRESH_SECRET='<Your refresh token secret>'
+API_ROOT='http://localhost:3000/api'
 ```
 
 ```bash

@@ -30,7 +30,7 @@ export interface IHabitDocument extends IHabit, Document {
 
 export type APIHabit = Omit<IHabit, 'owner'> & Pick<IHabitDocument, '_id'>
 
-export const enum Completion {
+export enum Completion {
     CHECK,
     TEXT,
     STARS,
@@ -50,7 +50,7 @@ export const CompletionMap = new Map<
     [Completion.NUMBER, { text: 'Number', icon: 'mdi-counter' }]
 ]) as ReadonlyMap<Completion, { text: string; icon: string }>
 
-export const enum Repeat {
+export enum Repeat {
     DAILY,
     WEEKLY,
     MONTHLY,
@@ -64,7 +64,7 @@ export const RepeatMap = new Map<Repeat, string>([
     [Repeat.CUSTOM, 'Custom']
 ]) as ReadonlyMap<Repeat, string>
 
-export const enum Day {
+export enum Day {
     SUN,
     MON,
     TUE,

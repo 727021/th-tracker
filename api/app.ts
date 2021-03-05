@@ -21,7 +21,7 @@ export const app = express()
 
 app.use(morgan('dev'))
     .use(helmet())
-    .use(cors({ credentials: true }))
+    .use(cors())
     .use(urlencoded({ extended: false }))
     .use(json())
     .use(bearer())
