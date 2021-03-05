@@ -6,9 +6,9 @@ See it working at [https://th-tracker.herokuapp.com/](https://th-tracker.herokua
 
 ## Build Setup
 
-The app requires a couple of environment variables be set in order to run.
+The app requires a few environment variables be set in order to run.
 
-Create a *.env* file with the following keys:
+Create a *.env* file with the following keys for local development:
 
 ```
 MONGODB_URL='<Your MongoDB connection URI>'
@@ -16,6 +16,8 @@ JWT_SECRET='<Your auth token secret>'
 JWT_REFRESH_SECRET='<Your refresh token secret>'
 API_ROOT='http://localhost:3000/api'
 ```
+
+These environment variables will also need to be set in production.
 
 ```bash
 # install dependencies
@@ -48,6 +50,7 @@ $ npm run start
 - [ ] Calendar events from API
 - [ ] Password resets
 - [ ] Account confirmation
+- [ ] User Preferences
 - [ ] Mobile layout
 - [X] Rename Heroku app
 - [ ] API docs on GitHub Pages
