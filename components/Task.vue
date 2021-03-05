@@ -2,7 +2,7 @@
     <v-list-item>
         <v-list-item-content
             class="pointer noselect"
-            @dblclick.prevent="editTask(task._id)"
+            @dblclick.prevent="editTask()"
         >
             <v-list-item-title
                 :class="{

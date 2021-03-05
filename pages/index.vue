@@ -23,8 +23,6 @@ export default class Index extends Vue {
     mounted() {
         // Set the selected day to do an initial load of tasks/habits
         this.$store.dispatch(SELECT_DAY, this.$store.state.selectedDay)
-
-        console.log('AUTH STATE:', this.$store.state.auth)
     }
 }
 </script>

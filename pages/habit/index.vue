@@ -38,7 +38,7 @@
                         :items="repeatItems"
                         v-model="repeat.value"
                         prepend-icon="mdi-repeat"
-                        @change="days = []"
+                        @change="days.value = []"
                         :error-messages="error(repeat)"
                     ></v-select>
                     <div class="d-flex justify-center mb-2">
@@ -50,8 +50,10 @@
                             <v-chip
                                 v-for="{ text, value } of dayItems"
                                 :key="value"
-                                :color="days.includes(value) ? 'purple' : ''"
-                                :class="{ 'white--text': days.includes(value) }"
+                                :color="chipColor(value)"
+                                :class="{
+                                    'white--text': chipTextColor(value)
+                                }"
                             >
                                 {{ text }}
                             </v-chip>
@@ -134,7 +136,7 @@ export default class NewHabit extends Vue {
                     completion: this.completion.value,
                     repeat: this.repeat.value,
                     days:
-                        this.days.value.length === 0
+                        this.days.value?.length === 0
                             ? undefined
                             : this.days.value
                 }
@@ -144,6 +146,7 @@ export default class NewHabit extends Vue {
 
             this.$router.push('/')
         } catch (err) {
+            console.log('SAVE ERROR', err)
             if (err.response.status !== StatusCodes.UNPROCESSABLE_ENTITY)
                 return this.$nuxt.error({
                     message: err.message ?? err.response?.data?.error,
@@ -175,6 +178,14 @@ export default class NewHabit extends Vue {
                 }
             }
         }
+    }
+
+    chipColor(i: Day) {
+        return this.days.value.includes(i) ? 'purple' : ''
+    }
+
+    chipTextColor(i: Day) {
+        return this.days.value.includes(i)
     }
 
     get repeatItems(): { text: string; value: Repeat }[] {

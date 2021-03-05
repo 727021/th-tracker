@@ -41,7 +41,7 @@ $ npm run start
 - [X] Task deletion
 - [X] Habit API
 - [X] Habit creation
-- [ ] Habit list
+- [X] Habit list
 - [ ] Habit editing
 - [ ] Habit deletion
 - [ ] Habit tracking

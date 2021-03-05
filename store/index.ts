@@ -23,7 +23,7 @@ import type { APIHabit } from '~/@types/habit'
 import { GET_HABITS, GET_MONTH, GET_TASKS } from '~/@types/getter-types'
 import dateToNumber from '~/api/util/dateToNumber'
 import { Context } from '@nuxt/types'
-import { RefreshScheme, RefreshSchemeOptions } from '@nuxtjs/auth-next'
+import { RefreshScheme } from '@nuxtjs/auth-next'
 import { APIUser } from '~/@types/user'
 import { StatusCodes } from 'http-status-codes'
 
@@ -46,7 +46,7 @@ export const getters: GetterTree<RootState, RootState> = {
         s.tasks.filter(t => t.date === s.selectedDay),
     [GET_HABITS]: (s): APIHabit[] => {
         const today: number = dateToNumber(s.selectedDay)
-        const dayOfWeek: Day = new Date(s.selectedDay).getDay()
+        const dayOfWeek: Day = new Date(s.selectedDay).getUTCDay() as Day
         const dayOfMonth = +s.selectedDay.split('-')[2]
 
         return s.habits.filter(h => {
@@ -54,7 +54,7 @@ export const getters: GetterTree<RootState, RootState> = {
             if (h.startCompare > today) return false
             if (
                 h.repeat === Repeat.WEEKLY &&
-                dayOfWeek !== (new Date(h.start).getDay() as Day)
+                dayOfWeek !== (new Date(h.start).getUTCDay() as Day)
             )
                 return false
             if (
